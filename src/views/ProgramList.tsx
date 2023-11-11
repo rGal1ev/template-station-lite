@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useProgramsStore } from "../store/programs";
 
 import ProgramCard from "../components/ProgramCard";
 import { useNavigate } from "react-router-dom";
 
 export default function ProgramList() {
-    const navigate = useNavigate();
+    const [isProgramListShowed, setProgramListShowed] = useState<boolean>(true);
 
     const programList = useProgramsStore((state) => state.programList);
-    const add = useProgramsStore((state) => state.add);
+    const getProgramCount = useProgramsStore((state) => state.getCount);
 
-    const [isProgramListShowed, setProgramListShowed] = useState<boolean>(true);   
-
-    function onProgramClick(id: string) {
+    const navigate = useNavigate();
+    
+    function handleProgramClick(id: string) {
         navigate(`/program/${id}`)
     }
 
@@ -20,14 +20,17 @@ export default function ProgramList() {
         <div className=" p-4">
             <div className="flex gap-2 items-center mb-2">
                 <p className="font-semibold">Список документов</p>
-                <button onClick={() => {setProgramListShowed((prev) => !prev)}} className="text-secondary-text">
+
+                {!(getProgramCount() === 0) &&
+                    <button onClick={() => {setProgramListShowed((prev) => !prev)}} className="text-secondary-text">
                     {isProgramListShowed ? 'Скрыть' : 'Показать'}
-                </button>
+                    </button>
+                }
             </div>
 
             <div className="flex flex-wrap gap-5">
                 {isProgramListShowed && programList.map(program => (
-                    <ProgramCard onClick={(id) => onProgramClick(id)} key={program.id} id={program.id} name={program.title} />
+                    <ProgramCard onClick={(id) => handleProgramClick(id)} key={program.id} id={program.id} name={program.title} />
                 ))}
             </div>
         </div>

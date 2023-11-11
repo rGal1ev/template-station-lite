@@ -4,9 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
-#root {
-    height: 100vh;
-    
+body {
     background-color: #272727;
+}
+
+#root {
     color: white;
 }

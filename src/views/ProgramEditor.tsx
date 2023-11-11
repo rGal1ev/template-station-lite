@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { Program } from "../types/program";
 
 export default function ProgramEditor() {
-    const { id } = useParams();
-    const get = useProgramsStore((state) => state.get);
-    
     const [editingProgram, setEditingProgram] = useState<Program | undefined>(undefined);
     const [isProgramExist, setProgramExist] = useState<boolean>(false);
+
+    const get = useProgramsStore((state) => state.get);
+
+    const { id } = useParams();
 
     function handleProgram(program: Program | undefined) {
         if (program === undefined) {

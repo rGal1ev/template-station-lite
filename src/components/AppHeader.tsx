@@ -1,37 +1,46 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useProgramsStore } from '../store/programs';
+import { Program } from '../types/program';
 
 export default function AppHeader() {
+    const [isProgramEditing, setProgramEditing] = useState<boolean>(false);
+
+    const getProgramCount = useProgramsStore((state) => state.getCount);
+    const addProgram = useProgramsStore((state) => state.add);
+
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [isProgramEditing, setProgramEditing] = useState<boolean>(false);
-
-    const getIdCount = useProgramsStore((state) => state.getIdCount);
-    const addProgram = useProgramsStore((state) => state.add);
-
-    useEffect(() => {
-        const locationPathArray = location.pathname.split('/')
+    function processRouteChange() {
+        const locationPathArray = location.pathname.split('/');
 
         if (locationPathArray[1] === 'program') {
             setProgramEditing(true);
-            return;
+            return
         }
 
-        setProgramEditing(false)
-    }, [location])
+        setProgramEditing(false);
+    }
 
-    function createEmptyProgram() {
-        const newID: string = `${getIdCount() + 1}`;
-        const newEmptyProgram = {
+    function generateEmptyProgram(newID: string): Program {
+        return {
             id: newID,
             title: `Новый документ ${newID}`
         }
-
-        addProgram(newEmptyProgram)
-        navigate(`/program/${newID}`)
     }
+
+    function createEmptyProgram() {
+        const newID: string = `${getProgramCount() + 1}`;
+        const newEmptyProgram = generateEmptyProgram(newID);
+
+        addProgram(newEmptyProgram);
+        navigate(`/program/${newID}`);
+    }
+
+    useEffect(() => {
+        processRouteChange();
+    }, [location])
 
     return (
         <header className="flex items-center justify-between bg-header-bg h-12 px-3">

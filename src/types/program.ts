@@ -10,5 +10,5 @@ export interface ProgramListState {
     remove: (by: string) => void;
 
     get: (by: string) => Program | undefined;
-    getIdCount: () => number;
+    getCount: () => number;
 }

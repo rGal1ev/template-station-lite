@@ -16,7 +16,7 @@ const useProgramsStore = create<ProgramListState>()(
             })),
         
             get: (by) => get().programList.find(program => program.id === by),
-            getIdCount: () => get().programList.length
+            getCount: () => get().programList.length
         }),
 
         {
