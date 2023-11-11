@@ -6,6 +6,7 @@ import { Program } from "../types/program";
 export default function ProgramEditor() {
     const [editingProgram, setEditingProgram] = useState<Program | undefined>(undefined);
     const [isProgramExist, setProgramExist] = useState<boolean>(false);
+    const [isLoading, setLoading] = useState<boolean>(true);
 
     const get = useProgramsStore((state) => state.get);
 
@@ -19,6 +20,7 @@ export default function ProgramEditor() {
 
         setEditingProgram(program);
         setProgramExist(true);
+        setLoading(false);
     }
 
     useEffect(() => {        
@@ -31,19 +33,21 @@ export default function ProgramEditor() {
     }, [])
 
     return (
-        <div>
-            {isProgramExist ? 
+        <div className="p-3">
+            {!isLoading &&
                 <div>
-                    Редактирование документа! <br/><br/>
-
-                    ID: {editingProgram?.id} <br/>
-                    TITLE: {editingProgram?.title} <br/>
+                    {isProgramExist ? 
+                    <div>
+                        <p><span className="font-bold mr-1">ID:</span>{editingProgram?.id}</p>
+                        <p><span className="font-bold mr-1">TITLE:</span>{editingProgram?.title}</p>
+                    </div>
+                :
+                    <div>
+                        Такого документа не существует!
+                    </div>
+                }    
                 </div>
-            :
-                <div>
-                    Такого документа не существует!
-                </div>
-            }         
+            }  
         </div>
     );
 }
