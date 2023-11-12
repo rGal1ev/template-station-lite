@@ -1,15 +1,17 @@
 import { Trash, Info, Plus } from 'react-feather';
 import { MouseEvent } from 'react';
-import { useProgramsStore } from '../store/programs';
+import { useProgramsStore } from '../../store/programs';
 import { useNavigate } from 'react-router-dom';
 
 interface ProgramCardProps {
     id: string;
     title: string;
+
     onDuplicateClick: (id: string) => void;
+    onInfoClick: (id: string) => void;
 }
  
-export default function ProgramCard({id, title, onDuplicateClick }: ProgramCardProps) {
+export default function ProgramCard({id, title, onDuplicateClick, onInfoClick }: ProgramCardProps) {
     const removeProgramById = useProgramsStore((state) => state.remove)
     const navigate = useNavigate()
 
@@ -21,6 +23,11 @@ export default function ProgramCard({id, title, onDuplicateClick }: ProgramCardP
     function handleDelete(e: MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
         removeProgramById(id)
+    }
+
+    function handleInfoOpening(e: MouseEvent<HTMLButtonElement>) {
+        e.stopPropagation()
+        onInfoClick(id)
     }
 
     function handleClick() {
@@ -44,13 +51,13 @@ export default function ProgramCard({id, title, onDuplicateClick }: ProgramCardP
                 <button className='hover:bg-accent hover:text-white block px-2 py-2 w-full text-left font-medium'>
                     Сформировать
                 </button>
-                <button onClick={(e) => handleDelete(e)} className='px-2 hover:bg-[#BF3C3C] hover:text-white'>
+                <button onClick={handleDelete} className='px-2 hover:bg-[#BF3C3C] hover:text-white'>
                     <Trash size={20}/>
                 </button>
                 <button onClick={handleDuplicateClick} className='px-2 hover:bg-accent hover:text-white'>
                     <Plus size={20}/>
                 </button>
-                <button className='px-2 hover:bg-accent hover:text-white'>
+                <button onClick={handleInfoOpening} className='px-2 hover:bg-accent hover:text-white'>
                     <Info size={20}/>
                 </button>
             </div>

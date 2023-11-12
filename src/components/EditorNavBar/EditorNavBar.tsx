@@ -1,12 +1,8 @@
 import { NavLink } from "react-router-dom";
 
-interface EditorNavBarProps {
-    
-}
-
 export default function EditorNavBar() {
     return (
-        <div className="w-[250px] h-full flex flex-col justify-between">
+        <div className="w-[250px] h-full flex flex-col justify-between border-[#808080] border-r-2">
             <nav>
                 <ul>
                     <li>
@@ -32,16 +28,6 @@ export default function EditorNavBar() {
                             <p className="font-semibold">Прочее</p>
                             <p className="medium text-[#BFBFBF]">Дополнительная информация рабочей программы</p>
                         </NavLink>
-                    </li>
-                </ul>
-            </nav>
-
-            <nav>
-                <ul>
-                    <li>
-                        <button className="block text-left px-4 py-2 bg-[#3A3A3A] hover:bg-[#444444] w-full">
-                            <p className="font-semibold">Скрыть панель</p>
-                        </button>
                     </li>
                 </ul>
             </nav>

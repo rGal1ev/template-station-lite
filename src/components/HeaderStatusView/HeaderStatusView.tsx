@@ -1,44 +1,25 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFilePicker } from "use-file-picker";
 
 import { Program } from "../../types/program";
 import { updateImportedProgramsId } from "./helpers";
 import { useProgramsStore } from "../../store/programs";
  
-export default function HeaderStatusView() {
-    const [isProgramEditing, setProgramEditing] = useState<boolean>(false)
-    const [isHomeViewOpened, setHomeViewOpened] = useState<boolean>(true)
+interface HeaderStatusViewProps {
+    isProgramEditing: boolean;
+    isHomeViewOpened: boolean;
+    programTitle: string | undefined;
+}
 
+export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened, programTitle }: HeaderStatusViewProps) {
     const addProgram = useProgramsStore((state) => state.add)
 
     const { openFilePicker, filesContent } = useFilePicker({
         accept: '.json',
     });
 
-    const location = useLocation()
     const navigate = useNavigate()
-
-    function processRouteChange() {
-        const locationPathArray = location.pathname.split('/')
-
-        switch (locationPathArray[1]) {
-            case 'program':
-                setProgramEditing(true)
-                setHomeViewOpened(false)
-                break
-
-            case '':
-                setProgramEditing(false)
-                setHomeViewOpened(true)
-                break
-
-            default:
-                setProgramEditing(false)
-                setHomeViewOpened(false)
-                break
-          }
-    }
 
     function handleProgramsImport(importedPrograms: Program[]) {
         const importedProgramsWithNewID = updateImportedProgramsId(importedPrograms)
@@ -47,10 +28,6 @@ export default function HeaderStatusView() {
             addProgram(program)
         })
     }
-
-    useEffect(() => {
-        processRouteChange()
-    }, [location])
 
     useEffect(() => {
         filesContent.map((file) => {
@@ -79,7 +56,7 @@ export default function HeaderStatusView() {
                         </div>     
                     :
                         <div className='relative before:absolute before:bg-[#489CFF] before:w-[70px] before:h-[70px] before:top-[150%] before:opacity-60 before:left-[50px] before:rounded-full before:blur-2xl before:z-[-1] after:absolute after:bg-[#9948FF] after:w-[70px] after:h-[70px] after:left-[100px] after:top-[150%] after:opacity-60 after:rounded-full after:blur-2xl after:z-[-1]'>
-                            <p className='font-medium'><span className='text-secondary-text block text-xm'>Редактирование</span>Рабочая программа</p>
+                            <p className='font-medium'><span className='text-secondary-text block text-xm'>Редактирование</span>{programTitle}</p>
                         </div>}   
             </div>
         </div>

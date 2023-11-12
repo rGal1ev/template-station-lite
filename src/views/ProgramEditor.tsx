@@ -1,18 +1,21 @@
-import EditorNavBar from "../components/EditorNavBar";
+import EditorNavBar from "../components/EditorNavBar/EditorNavBar";
 
 import { useParams, Outlet, useOutletContext } from "react-router-dom";
 import { useProgramsStore } from "../store/programs";
 import { useEffect, useState } from "react";
 import { Program } from "../types/program";
 
-type ContextType = { editingProgram: Program | undefined };
-export function useProgram() {
-    return useOutletContext<ContextType>();
+type EditingProgramContext = { 
+    editingProgramId: string
+};
+
+export function useEditingProgramId() {
+    return useOutletContext<EditingProgramContext>();
 }
 
 export default function ProgramEditor() {
-    const [editingProgram, setEditingProgram] = useState<Program | undefined>(undefined)
     const [isProgramExist, setProgramExist] = useState<boolean>(false)
+    const [editingProgramId, setEditingProgramId] = useState<string>('')
 
     const get = useProgramsStore((state) => state.get)
     const { id } = useParams()
@@ -23,14 +26,14 @@ export default function ProgramEditor() {
             return
         }
 
-        setEditingProgram(program)
         setProgramExist(true)
     }
 
-    useEffect(() => {        
+    useEffect(() => {     
         if (id === undefined) {
             return
         }
+        setEditingProgramId(id)
 
         const program = get(id)
         handleProgram(program)
@@ -41,7 +44,7 @@ export default function ProgramEditor() {
             {isProgramExist &&
             <>
                 <EditorNavBar />
-                <Outlet context={{editingProgram}} />
+                <Outlet context={{ editingProgramId }} />
             </>}  
         </div>
     );

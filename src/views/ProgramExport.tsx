@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useProgramsStore } from "../store/programs";
-import ProgramCardChooser from "../components/ProgramCardChooser";
+import ProgramCardChooser from "../components/ProgramCardChooser/ProgramCardChooser";
 import { Program } from "../types/program";
 
 export default function ProgramExport() {
@@ -20,8 +20,15 @@ export default function ProgramExport() {
 
     function handleExporting() {
         const exportablePrograms: Program[] = programList.filter((item) => selectedProgramsList.includes(item.id))
+        const preparedExportablePrograms: Program[] = exportablePrograms.map(program => {
+            return {
+                ...program,
+                id: ''
+            }
+        })
+
         const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-            JSON.stringify(exportablePrograms)
+            JSON.stringify(preparedExportablePrograms)
         )}`;
 
         const link = document.createElement("a");

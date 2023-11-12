@@ -3,10 +3,13 @@ import { useProgramsStore } from "../../store/programs"
 
 import { Program } from "../../types/program"
 import { duplicateProgram } from "./helpers"
-import ProgramCard from "../ProgramCard"
+import ProgramCard from "../ProgramCard/ProgramCard"
+import ProgramSideBar from "../ProgramSideBar/ProgramSideBar"
 
 export default function ProgramCardList() {
     const [isProgramListShowed, setProgramListShowed] = useState<boolean>(true)
+    const [isSideBarOpened, setSideBarOpened] = useState<boolean>(false)
+    const [sideBarProgramId, setSideBarProgramId] = useState<string>('')
 
     const programList = useProgramsStore((state) => state.programList)
     const getProgramsCount = useProgramsStore((state) => state.getCount)
@@ -27,6 +30,16 @@ export default function ProgramCardList() {
         includeDuplicatedProgram(duplicatedProgram)
     }
 
+    function handleSideBarOpen(id: string) {
+        setSideBarProgramId(id)
+        setSideBarOpened(true)
+    }
+
+    function handleSideBarClose() {
+        setSideBarOpened(false)
+        setSideBarProgramId('')
+    }
+
     return (
         <div className=" p-4">
             <div className="flex gap-2 items-center mb-2">
@@ -42,11 +55,14 @@ export default function ProgramCardList() {
             <div className="flex flex-wrap gap-3">
                 {isProgramListShowed && programList.map(program => (
                     <ProgramCard onDuplicateClick={(id) => handleProgramDuplication(id)}
+                                 onInfoClick={(id) => handleSideBarOpen(id)}
                                  key={program.id} 
                                  id={program.id} 
                                  title={program.title} />
                 ))}
             </div>
+
+            <ProgramSideBar onClose={handleSideBarClose} programId={sideBarProgramId} isOpened={isSideBarOpened} />
         </div>
     );
 }
