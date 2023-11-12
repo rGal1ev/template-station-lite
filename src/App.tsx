@@ -7,6 +7,7 @@ import { Routes, Route } from 'react-router-dom'
 import General from './views/editorViews/General';
 import FirstLoad from './views/FirstLoad';
 import { useUserPreferences } from './store/preferences';
+import DeveloperEditor from './views/editorViews/DeveloperEditor';
 
 export default function App() {
     const { getMeetingHandled } = useUserPreferences()
@@ -27,7 +28,7 @@ export default function App() {
 
                         <Route path='/program/:id' element={<ProgramEditor />}>
                             <Route path='general' element={<General />}>
-                                <Route path='edit' element={<h1>Edit</h1>} />
+                                <Route path='developer' element={<DeveloperEditor />} />
                             </Route>
                             <Route path='specifications' element={<h1>Общая характеристика</h1>}>
                                 

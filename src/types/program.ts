@@ -15,7 +15,7 @@ enum CompetenceType {
     GENERAL = "general"
 }
 
-interface Developer {
+export interface Developer {
     name: string
     post: string
 }

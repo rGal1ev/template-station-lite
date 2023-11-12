@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 export default function EditorNavBar() {
     return (
-        <div className="w-[250px] h-full flex flex-col justify-between border-[#808080] border-r-2">
+        <div className="w-[300px] h-full flex flex-col justify-between items-stretch border-[#808080] border-r-2">
             <nav>
                 <ul>
                     <li>

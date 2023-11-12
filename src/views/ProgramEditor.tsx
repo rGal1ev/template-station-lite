@@ -29,7 +29,7 @@ export default function ProgramEditor() {
         setProgramExist(true)
     }
 
-    useEffect(() => {     
+    useEffect(() => {  
         if (id === undefined) {
             return
         }

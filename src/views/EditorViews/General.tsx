@@ -3,13 +3,21 @@ import { useEditingProgramId } from "../ProgramEditor";
 
 import { Program } from "../../types/program";
 import { useProgramsStore } from "../../store/programs";
-import { useOutlet } from "react-router-dom";
+import { Outlet, useNavigate, useOutlet, useOutletContext } from "react-router-dom";
 import Field, { FieldType } from "../../components/UI/Field";
+import DeveloperCard from "../../components/Editor/DeveloperCard/DeveloperCard";
+
+type DeveloperContext = {
+    developerId: string | undefined
+}
+
+export function useDeveloperContext() {
+    return useOutletContext<DeveloperContext>()
+}
 
 export default function General() {
-    const outlet = useOutlet()
-
     const [editingProgram, setEditingProgram] = useState<Program | undefined>(undefined)
+    const [developerId, setDeveloperId] = useState<string | undefined>(undefined)
     const { editingProgramId } = useEditingProgramId()
 
     const programDocumentName = () => {
@@ -19,6 +27,9 @@ export default function General() {
 
     const get = useProgramsStore((state) => state.get)
     const update = useProgramsStore((state) => state.update)
+
+    const outlet = useOutlet()
+    const navigate = useNavigate()
 
     function handleFieldsChange(e: ChangeEvent<HTMLInputElement>) {
         if (editingProgram === undefined) return
@@ -59,21 +70,32 @@ export default function General() {
         })
     }
 
+    function handleDeveloperClick(id: number) {
+
+    }
+
+    function handleDeveloperDelete(id: number) {
+
+    }
+
+    function handleNewDeveloper() {
+        navigate('developer', {
+            state: {
+                someData: ""
+            }
+        })
+    }
+
     useEffect(() => {
         setEditingProgram(get(editingProgramId))
     }, [editingProgramId])
 
     useEffect(() => {
-        if (editingProgram === undefined) return
-
-        return () => {
-            if (editingProgram === undefined) return
-            update(editingProgramId, editingProgram)
-        }
-    }, [editingProgram])
+        
+    }, [])
 
     return (
-        <div>
+        <div className="flex-1">
             {(outlet === null) ?
             
             <div className="p-4">
@@ -109,11 +131,28 @@ export default function General() {
                 </div>
 
                 <div>
+                    <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
+                        Разработчики
+                    </label>
+                    <nav>
+                        <ul className="flex flex-col gap-2">
+                            {get(editingProgramId)?.developers.map((developer, index) => (
+                                <DeveloperCard key={index}
+                                               name={developer.name} 
+                                               post={developer.post}
+                                               onClick={() => handleDeveloperClick(index)}
+                                               onDeleteClick={() => handleDeveloperDelete(index)}/>
+                            ))}
 
+                            <button onClick={handleNewDeveloper} className="text-sm px-6 py-2 rounded font-medium dark:bg-[#3A3A3A] bg-[#E1E1E1] text-white">
+                                Добавить разработчика
+                            </button>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             :
-                outlet
+                <Outlet context={{ developerId }} />
             }
         </div>
         
