@@ -1,13 +1,13 @@
-import AppHeader from './components/Header/AppHeader';
-import ProgramList from './views/ProgramList';
-import ProgramEditor from './views/ProgramEditor';
+import AppHeader from '../components/Header/AppHeader';
+import ProgramList from '../views/ProgramList';
+import ProgramEditor from '../views/ProgramEditor';
 
-import ProgramExport from './views/ProgramExport';
+import ProgramExport from '../views/ProgramExport';
 import { Routes, Route } from 'react-router-dom'
-import General from './views/editorViews/General';
-import FirstLoad from './views/FirstLoad';
-import { useUserPreferences } from './store/preferences';
-import DeveloperEditor from './views/editorViews/DeveloperEditor';
+import General from '../views/editorViews/General';
+import FirstLoad from '../views/FirstLoad';
+import { useUserPreferences } from '../store/preferences';
+import DeveloperEditor from '../views/editorViews/DeveloperEditor';
 
 export default function App() {
     const { getMeetingHandled } = useUserPreferences()

@@ -17,7 +17,7 @@ export function useDeveloperContext() {
 
 export default function General() {
     const [editingProgram, setEditingProgram] = useState<Program | undefined>(undefined)
-    const [developerId, setDeveloperId] = useState<string | undefined>(undefined)
+    const [developerId] = useState<string | undefined>(undefined)
     const { editingProgramId } = useEditingProgramId()
 
     const programDocumentName = () => {
@@ -26,7 +26,6 @@ export default function General() {
     }
 
     const get = useProgramsStore((state) => state.get)
-    const update = useProgramsStore((state) => state.update)
 
     const outlet = useOutlet()
     const navigate = useNavigate()
@@ -71,11 +70,11 @@ export default function General() {
     }
 
     function handleDeveloperClick(id: number) {
-
+        console.log(id)
     }
 
     function handleDeveloperDelete(id: number) {
-
+        console.log(id)
     }
 
     function handleNewDeveloper() {

@@ -11,6 +11,7 @@ interface DeveloperCardProps {
 export default function DeveloperCard({ name, post, onDeleteClick, onClick }: DeveloperCardProps) {
     function handleDeleteClick(e: MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
+        onDeleteClick()
     }
 
     return (
