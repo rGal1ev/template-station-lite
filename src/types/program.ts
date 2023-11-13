@@ -1,47 +1,4 @@
-export interface ProgramListState {
-    programList: Program[]
-    
-    add: (newProgram: Program) => void
-    remove: (by: string) => void
-    update: (by: string, program: Program) => void
-
-    get: (by: string) => Program | undefined
-    getAll: () => Program[] | undefined
-    getCount: () => number
-}
-
-enum CompetenceType {
-    PRACTICIAL = "practicial",
-    GENERAL = "general"
-}
-
-export interface Developer {
-    name: string
-    post: string
-}
-
-interface EducationalUnit {
-    title: string
-    volume: number // Default 2
-}
-
-interface Theme {
-    theoretical: EducationalUnit[]
-    laboratory: EducationalUnit[]
-    practical: EducationalUnit[]
-    independent: EducationalUnit[]
-    certification: EducationalUnit[]
-}
-
-interface Competence {
-    type: CompetenceType
-    title: string
-}
-
-interface Section {
-    competencies: Competence[]
-    themes: Theme[]
-}
+import { Developer, Competence, Section } from "./program/index"
 
 export interface Program {
     id: string

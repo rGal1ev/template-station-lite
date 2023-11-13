@@ -1,20 +1,19 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useFilePicker } from "use-file-picker";
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { useFilePicker } from "use-file-picker"
 
-import { Program } from "../../types/program";
-import { updateImportedProgramsId } from "./helpers";
-import { useProgramsStore } from "../../store/programs";
+import { Program } from "../../types/program"
+import { updateImportedProgramsId } from "./helpers"
+import {useLocalStorage } from 'usehooks-ts'
  
 interface HeaderStatusViewProps {
     isProgramEditing: boolean;
     isHomeViewOpened: boolean;
-    programTitle: string | undefined;
 }
 
-export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened, programTitle }: HeaderStatusViewProps) {
-    const addProgram = useProgramsStore((state) => state.add)
-
+export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }: HeaderStatusViewProps) {
+    const [_, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
+    
     const { openFilePicker, filesContent } = useFilePicker({
         accept: '.json',
     });
@@ -24,9 +23,9 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened, p
     function handleProgramsImport(importedPrograms: Program[]) {
         const importedProgramsWithNewID = updateImportedProgramsId(importedPrograms)
 
-        importedProgramsWithNewID.forEach(program => {
-            addProgram(program)
-        })
+        setStorageProgramList((prev) => (
+            [...prev, ...importedProgramsWithNewID]
+        ))
     }
 
     useEffect(() => {
@@ -56,7 +55,7 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened, p
                         </div>     
                     :
                         <div className='relative before:absolute before:bg-[#489CFF] before:w-[70px] before:h-[70px] before:top-[150%] before:opacity-60 before:left-[50px] before:rounded-full before:blur-2xl before:z-[-1] after:absolute after:bg-[#9948FF] after:w-[70px] after:h-[70px] after:left-[100px] after:top-[150%] after:opacity-60 after:rounded-full after:blur-2xl after:z-[-1]'>
-                            <p className='font-medium'><span className='text-secondary-text block text-xm'>Редактирование</span>{programTitle}</p>
+                            <span className='text-secondary-text block text-xm'>Редактирование документа</span>
                         </div>}   
             </div>
         </div>

@@ -26,15 +26,12 @@ export default function App() {
                     <Routes>
                         <Route path='/' element={<ProgramList />} />
 
-                        <Route path='/program/:id' element={<ProgramEditor />}>
-                            <Route path='general' element={<General />}>
-                                <Route path='developer' element={<DeveloperEditor />} />
-                            </Route>
-                            <Route path='specifications' element={<h1>Общая характеристика</h1>}>
-                                
-                            </Route>
+                        <Route path='/program' element={<ProgramEditor />}>
+                            <Route path='general' element={<General />} />
+                            <Route path='specifications' element={<h1>Общая характеристика</h1>} />
                             <Route path='plan' element={<h1>Тематический план</h1>} />
                             <Route path='other' element={<h1>Прочее</h1>} />
+                            <Route path='developer' element={<DeveloperEditor />} />
                         </Route>
 
                         <Route path='/export' element={<ProgramExport />} />

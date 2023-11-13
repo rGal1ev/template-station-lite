@@ -10,12 +10,13 @@ interface ProgramCardChooserProps {
 export default function ProgramCardChooser({id, title, onClick}: ProgramCardChooserProps) {
     const [isSelected, setSelected] = useState<boolean>(false)
 
-    useEffect(() => {
-        onClick(id, isSelected)
-    }, [isSelected])
+    function handleClick() {
+        setSelected((prev) => !prev)
+        onClick(id, !isSelected)
+    }
 
     return (
-        <div onClick={() => setSelected((prev) => !prev)} className={`overflow-clip relative flex justify-between flex-col p-3 w-[350px] dark:bg-[#3A3A3A] bg-[#E1E1E1] rounded cursor-pointer border-2 border-transparent transition-all ${isSelected ? 'dark:border-accent border-accent' : 'dark:hover:border-[#575757] hover:border-[#BDBDBD]'}`}>
+        <div onClick={handleClick} className={`overflow-clip relative flex justify-between flex-col p-3 w-[350px] dark:bg-[#3A3A3A] bg-[#E1E1E1] rounded cursor-pointer border-2 border-transparent transition-all ${isSelected ? 'dark:border-accent border-accent' : 'dark:hover:border-[#575757] hover:border-[#BDBDBD]'}`}>
             <p className="font-medium truncate h-full mb-4">{title}</p>
             <div>
                 <div className="flex justify-between mb-2">

@@ -6,7 +6,7 @@ export interface FirstLoadProps {
 
 export default function FirstLoad({ onOpenClick }: FirstLoadProps) {
     return (
-        <div onClick={onOpenClick} className="flex h-full p-10 justify-between flex-col">
+        <div className="flex h-full p-10 justify-between flex-col">
             <div>
                 <div className='flex items-center gap-2 mb-10'>
                     <h2 className="font-bold text-lg">TemplateStation Lite</h2>
@@ -20,7 +20,7 @@ export default function FirstLoad({ onOpenClick }: FirstLoadProps) {
             </div>
 
             <div>
-                <button className='px-12 py-4 bg-accent rounded font-semibold text-white'>
+                <button onClick={onOpenClick} className='px-12 py-4 bg-accent rounded font-semibold text-white'>
                     Открыть
                 </button>
             </div>

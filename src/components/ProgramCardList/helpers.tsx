@@ -13,3 +13,21 @@ export function duplicateProgram(program: Program): Program | undefined {
 
     return duplicatedProgram
 }
+
+export function getProgramById(by: string, programList: Program[]): Program | undefined {
+    return programList.find(program => program.id === by)
+}
+
+export function deleteProgramFromList(by: string, programList: Program[]): Program[] {
+    return [...programList.filter(program => program.id !== by)]
+}
+
+export function updateProgramInList(program: Program, programList: Program[]) {
+    return programList.map(programInList => {
+        if (programInList.id === program.id) {
+            return program
+        }
+
+        return programInList
+    })
+}

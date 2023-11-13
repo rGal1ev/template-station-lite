@@ -1,20 +1,23 @@
-import { useDeveloperContext } from "./General";
-import { useProgramsStore } from "../../store/programs";
-import Field from "../../components/UI/Field";
-import { useParams } from "react-router-dom";
-import { ChangeEvent, useEffect, useState } from "react";
-import { Developer, Program } from "../../types/program";
+import { useProgramStore } from "../../store/program"
+import Field from "../../components/UI/Field"
+import { ChangeEvent, useEffect, useState } from "react"
+import { Developer } from "../../types/program/index"
+import { Program } from "../../types/program"
+import { useLocation, useNavigate } from "react-router-dom"
+import { OpenType } from "../../types/editor"
+import { useEditorStore } from "../../store/editor"
 
 export default function DeveloperEditor() {
-    const [editingProgram, setEditingProgram] = useState<Program | undefined>(undefined)
+    const editingProgram = useProgramStore((state) => state.program)
+    const developerId = useEditorStore((state) => state.developerId)
+
     const [developer, setDeveloper] = useState<Developer | undefined>(undefined)
+    const getDeveloperBy = useProgramStore((state) => state.developerBy)
+    const addDeveloperToProgram = useProgramStore((state) => state.addDeveloper)
+    const updateDeveloper = useProgramStore((state) => state.updateDeveloper)
 
-    const { developerId } = useDeveloperContext()
-    const { id } = useParams()
+    const navigate = useNavigate()
 
-    const get = useProgramsStore((state) => state.get)
-    const update = useProgramsStore((state) => state.update)
-    
     function handleDeveloperNameChange(e: ChangeEvent<HTMLInputElement>) {
         setDeveloper((prev) => {
             if (prev === undefined) return prev
@@ -34,36 +37,21 @@ export default function DeveloperEditor() {
                 ...prev,
                 post: e.target.value
             }
-        })
+        })  
     }
-    
-    useEffect(() => {
-        if (id === undefined) return
-        setEditingProgram(get(id))
-    }, [id])
 
     useEffect(() => {
-        if (developerId === undefined) {
-            setDeveloper({
-                name: '',
-                post: ''
-            })
+        if (developerId === undefined) return  
 
-            return
-        }
-
-        setDeveloper(editingProgram?.developers[parseInt(developerId)])
-    }, [editingProgram])
+        const currentDeveloper: Developer | undefined = getDeveloperBy(developerId)
+        if (currentDeveloper === undefined) return
+        setDeveloper({...currentDeveloper})
+    }, [])
 
     useEffect(() => {
         return () => {
-            if (editingProgram === undefined) return
             if (developer === undefined) return
-
-            update(editingProgram.id, {
-                ...editingProgram,
-                developers: [...editingProgram.developers, developer]
-            })
+            updateDeveloper(developer)
         }
     }, [developer])
 
@@ -82,6 +70,9 @@ export default function DeveloperEditor() {
                 </label>
                 <Field value={developer?.post || ''} onChange={handleDeveloperPostChange} />
             </div>
+            <button onClick={() => navigate(-1)}>
+                Вернуться назад
+            </button>
         </div>
     );
 }

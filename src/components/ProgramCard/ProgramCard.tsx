@@ -1,28 +1,25 @@
-import { Trash, Info, Plus } from 'react-feather';
-import { MouseEvent } from 'react';
-import { useProgramsStore } from '../../store/programs';
-import { useNavigate } from 'react-router-dom';
+import { Trash, Info, Plus } from 'react-feather'
+import { MouseEvent } from 'react'
 
 interface ProgramCardProps {
-    id: string;
-    title: string;
+    id: string
+    title: string
 
-    onDuplicateClick: (id: string) => void;
-    onInfoClick: (id: string) => void;
+    onClick: (id: string) => void
+    onDuplicateClick: (id: string) => void
+    onInfoClick: (id: string) => void
+    onDeleteClick: (id: string) => void
 }
  
-export default function ProgramCard({id, title, onDuplicateClick, onInfoClick }: ProgramCardProps) {
-    const removeProgramById = useProgramsStore((state) => state.remove)
-    const navigate = useNavigate()
-
+export default function ProgramCard({id, title, onDuplicateClick, onInfoClick, onDeleteClick, onClick }: ProgramCardProps) {
     function handleDuplicateClick(e: MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation();
-        onDuplicateClick(id);
+        e.stopPropagation()
+        onDuplicateClick(id)
     }
 
     function handleDelete(e: MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
-        removeProgramById(id)
+        onDeleteClick(id)
     }
 
     function handleInfoOpening(e: MouseEvent<HTMLButtonElement>) {
@@ -31,7 +28,7 @@ export default function ProgramCard({id, title, onDuplicateClick, onInfoClick }:
     }
 
     function handleClick() {
-        navigate(`/program/${id}/general`)
+        onClick(id)
     }
 
     return (

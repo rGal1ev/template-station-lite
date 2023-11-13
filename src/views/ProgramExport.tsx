@@ -1,11 +1,10 @@
-import { useState } from "react";
-
-import { useProgramsStore } from "../store/programs";
-import ProgramCardChooser from "../components/ProgramCardChooser/ProgramCardChooser";
-import { Program } from "../types/program";
+import { useState } from "react"
+import ProgramCardChooser from "../components/ProgramCardChooser/ProgramCardChooser"
+import { useLocalStorage } from 'usehooks-ts'
+import { Program } from "../types/program"
 
 export default function ProgramExport() {
-    const programList = useProgramsStore((state) => state.programList)
+    const [storageProgramList, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
     const [selectedProgramsList, setSelectedProgramsList] = useState<string[]>([])
     
     function handleProgramClick(id: string, isSelected: boolean) {
@@ -19,7 +18,7 @@ export default function ProgramExport() {
     }
 
     function handleExporting() {
-        const exportablePrograms: Program[] = programList.filter((item) => selectedProgramsList.includes(item.id))
+        const exportablePrograms: Program[] = storageProgramList.filter((item) => selectedProgramsList.includes(item.id))
         const preparedExportablePrograms: Program[] = exportablePrograms.map(program => {
             return {
                 ...program,
@@ -52,9 +51,8 @@ export default function ProgramExport() {
             </div>
             }
             
-
             <div className="flex flex-wrap gap-3 mb-4">
-                {programList.map(program => (
+                {storageProgramList.map(program => (
                     <ProgramCardChooser key={program.id} 
                                         id={program.id} 
                                         title={program.title}

@@ -1,11 +1,13 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { useEditingProgramId } from "../ProgramEditor";
+import { ChangeEvent, useEffect, useState } from "react"
 
-import { Program } from "../../types/program";
-import { useProgramsStore } from "../../store/programs";
-import { Outlet, useNavigate, useOutlet, useOutletContext } from "react-router-dom";
-import Field, { FieldType } from "../../components/UI/Field";
-import DeveloperCard from "../../components/Editor/DeveloperCard/DeveloperCard";
+import { Program } from "../../types/program"
+import { useProgramStore } from "../../store/program"
+import { useEditorStore } from "../../store/editor"
+import { Outlet, useNavigate, useOutlet, useOutletContext } from "react-router-dom"
+import Field, { FieldType } from "../../components/UI/Field"
+import DeveloperCard from "../../components/Editor/DeveloperCard/DeveloperCard"
+import { OpenType } from "../../types/editor"
+import { v4 as uuid } from "uuid"
 
 type DeveloperContext = {
     developerId: string | undefined
@@ -16,88 +18,62 @@ export function useDeveloperContext() {
 }
 
 export default function General() {
-    const [editingProgram, setEditingProgram] = useState<Program | undefined>(undefined)
-    const [developerId] = useState<string | undefined>(undefined)
-    const { editingProgramId } = useEditingProgramId()
+    const developmentYear = useProgramStore((state) => state.program?.developmentYear)
+    const academicSpecialty = useProgramStore((state) => state.program?.academicSpecialty)
+    const academicDiscipline = useProgramStore((state) => state.program?.academicDiscipline)
+
+    const setDevelopmentYear = useProgramStore((state) => state.setDevelopmentYear)
+    const setAcademicSpecialty = useProgramStore((state) => state.setAcademicSpecialty)
+    const setAcademicDiscipline = useProgramStore((state) => state.setAcademicDiscipline)
+
+    const addDeveloperToProgram = useProgramStore((state) => state.addDeveloper)
+    const editingProgram = useProgramStore((state) => state.program)
+
+    const updateDeveloperId = useEditorStore((state) => state.updateDeveloperId)
+    const removeDeveloperBy = useProgramStore((state) => state.removeDeveloper)
 
     const programDocumentName = () => {
-        if (editingProgram === undefined) return
         return `РП_${editingProgram?.academicDiscipline}_${editingProgram?.developmentYear}`
     }
 
-    const get = useProgramsStore((state) => state.get)
-
-    const outlet = useOutlet()
     const navigate = useNavigate()
 
     function handleFieldsChange(e: ChangeEvent<HTMLInputElement>) {
-        if (editingProgram === undefined) return
-        
-        setEditingProgram(prev => {
-            if (prev === undefined) return prev
-
-            return {
-                ...prev,
-                developmentYear: e.target.value
-            }
-        })
+        setDevelopmentYear(e.target.value)
     }
 
     function handleAcademicSpecialtyChange(e: ChangeEvent<HTMLInputElement>) {
-        if (editingProgram === undefined) return
-
-        setEditingProgram(prev => {
-            if (prev === undefined) return prev
-
-            return {
-                ...prev,
-                academicSpecialty: e.target.value
-            }
-        })
+        setAcademicSpecialty(e.target.value)
     }
 
     function handleAcademicDisciplineChange(e: ChangeEvent<HTMLInputElement>) {
-        if (editingProgram === undefined) return
-
-        setEditingProgram(prev => {
-            if (prev === undefined) return prev
-
-            return {
-                ...prev,
-                academicDiscipline: e.target.value
-            }
-        })
+        setAcademicDiscipline(e.target.value)
     }
 
-    function handleDeveloperClick(id: number) {
-        console.log(id)
+    function handleDeveloperClick(id: string) {
+        updateDeveloperId(id)
+        navigate('../developer')
     }
 
-    function handleDeveloperDelete(id: number) {
-        console.log(id)
+    function handleDeveloperDelete(id: string) {
+        removeDeveloperBy(id)
     }
 
     function handleNewDeveloper() {
-        navigate('developer', {
-            state: {
-                someData: ""
-            }
+        const newDeveloperID = uuid();
+
+        addDeveloperToProgram({
+            id: newDeveloperID,
+            name: 'Новый разработчик',
+            post: 'Должность'
         })
+
+        updateDeveloperId(newDeveloperID)
+        navigate('../developer')
     }
 
-    useEffect(() => {
-        setEditingProgram(get(editingProgramId))
-    }, [editingProgramId])
-
-    useEffect(() => {
-        
-    }, [])
-
     return (
-        <div className="flex-1">
-            {(outlet === null) ?
-            
-            <div className="p-4">
+        <div className="flex-1 gap-4 p-4">   
                 <div className="flex gap-4">
                     <div className="mb-4">
                         <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
@@ -110,7 +86,8 @@ export default function General() {
                         <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
                             Год
                         </label>
-                        <Field onChange={handleFieldsChange} value={editingProgram?.developmentYear || ''}/>
+
+                        <Field onChange={handleFieldsChange} value={developmentYear || ''}/>
                     </div>
                 </div>
 
@@ -119,13 +96,13 @@ export default function General() {
                         <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
                             Специальность
                         </label>
-                        <Field onChange={handleAcademicSpecialtyChange} value={editingProgram?.academicSpecialty || ''}/>
+                        <Field onChange={handleAcademicSpecialtyChange} value={academicSpecialty || ''}/>
                     </div>
                     <div className="mb-4">
                         <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
                             Дисциплина
                         </label>
-                        <Field onChange={handleAcademicDisciplineChange} value={editingProgram?.academicDiscipline || ''}/>
+                        <Field onChange={handleAcademicDisciplineChange} value={academicDiscipline || ''}/>
                     </div>
                 </div>
 
@@ -135,12 +112,12 @@ export default function General() {
                     </label>
                     <nav>
                         <ul className="flex flex-col gap-2">
-                            {get(editingProgramId)?.developers.map((developer, index) => (
-                                <DeveloperCard key={index}
+                            {editingProgram?.developers.map(developer => (
+                                <DeveloperCard key={developer.id}
                                                name={developer.name} 
                                                post={developer.post}
-                                               onClick={() => handleDeveloperClick(index)}
-                                               onDeleteClick={() => handleDeveloperDelete(index)}/>
+                                               onClick={() => handleDeveloperClick(developer.id)}
+                                               onDeleteClick={() => handleDeveloperDelete(developer.id)}/>
                             ))}
 
                             <button onClick={handleNewDeveloper} className="text-sm px-6 py-2 rounded font-medium dark:bg-[#3A3A3A] bg-[#E1E1E1] text-white">
@@ -150,10 +127,5 @@ export default function General() {
                     </nav>
                 </div>
             </div>
-            :
-                <Outlet context={{ developerId }} />
-            }
-        </div>
-        
     );
 }

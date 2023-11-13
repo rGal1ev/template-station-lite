@@ -1,31 +1,45 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useProgramsStore } from '../../store/programs'
+import { useProgramStore } from '../../store/program'
+import { useLocalStorage } from 'usehooks-ts'
 import { Sun, Moon } from 'react-feather'
 
 import { generateEmptyProgram } from '../../helpers/generateEmptyProgram'
 import HeaderStatusView from '../HeaderStatusView/HeaderStatusView'
 import { Program } from '../../types/program'
+import { useEditorStore } from '../../store/editor'
 
 export default function AppHeader() {
     const [isProgramEditing, setProgramEditing] = useState<boolean>(false)
     const [isHomeViewOpened, setHomeViewOpened] = useState<boolean>(true)
 
-    const [editingProgram, setEditingProgram] = useState<Partial<Program> | undefined>(undefined)
-    const [editingProgramId, setEditingProgramId] = useState<string | undefined>(undefined)
-    const [isDarkMode, setDarkMode] = useState<boolean>(true)
+    const editingProgram = useProgramStore((state) => state.program?.id)
+    const [storageProgramList, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
+    const updateEditorProgramId = useEditorStore((state) => state.updateId)
 
-    const addProgram = useProgramsStore((state) => state.add)
-    const get = useProgramsStore((state) => state.get)
+    const [isDarkMode, setDarkMode] = useState<boolean>(true)
 
     const location = useLocation()
     const navigate = useNavigate()
 
-    function createEmptyProgram() {
-        const newEmptyProgram = generateEmptyProgram()
+    const updateEditingProgram = useProgramStore((state) => state.update)
 
-        addProgram(newEmptyProgram)
-        navigate(`/program/${newEmptyProgram.id}/general`)
+    function saveNewProgram(program: Program) {
+        setStorageProgramList((prevList) => [...prevList, program])
+        updateEditingProgram(program)
+    }
+
+    function createEmptyProgram() {
+        const newEmptyProgram: Program = generateEmptyProgram()
+
+        setStorageProgramList((prev) => (
+            [...prev, newEmptyProgram]
+        ))
+
+        updateEditorProgramId(newEmptyProgram.id)
+        saveNewProgram(newEmptyProgram)
+
+        navigate(`/program/general`)
     }
 
     function handleModeSwitch() {
@@ -37,8 +51,6 @@ export default function AppHeader() {
 
         switch (locationPathArray[1]) {
             case 'program':
-                setEditingProgramId(locationPathArray[2])
-
                 setProgramEditing(true)
                 setHomeViewOpened(false)
                 break
@@ -73,14 +85,6 @@ export default function AppHeader() {
         link.click();
     }
 
-    function handleProgramChange() {
-        if (editingProgramId === undefined) return
-        const program = get(editingProgramId)
-
-        if (program === undefined) return
-        setEditingProgram(program)
-    }
-
     useEffect(() => {
         processRouteChange()
     }, [location])
@@ -89,14 +93,10 @@ export default function AppHeader() {
         document.documentElement.classList.toggle('dark')
     }, [isDarkMode])
 
-    useEffect(() => {
-        handleProgramChange()
-    }, [editingProgramId])
-
     return (
         <header className="relative z-[1] flex items-center justify-between dark:bg-header-bg bg-[#EBEBEB] h-14 px-3 overflow-clip border-b-2 border-[#808080]">
             <div className='flex items-center gap-10'>
-                <HeaderStatusView programTitle={editingProgram?.title || '...'} isHomeViewOpened={isHomeViewOpened} isProgramEditing={isProgramEditing} />
+                <HeaderStatusView isHomeViewOpened={isHomeViewOpened} isProgramEditing={isProgramEditing} />
             </div>
 
             <div className='flex items-center gap-2'>
