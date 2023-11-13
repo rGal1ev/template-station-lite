@@ -12,7 +12,7 @@ interface HeaderStatusViewProps {
 }
 
 export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }: HeaderStatusViewProps) {
-    const [_, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
+    const [, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
     
     const { openFilePicker, filesContent } = useFilePicker({
         accept: '.json',
@@ -39,8 +39,8 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
     return (
         <div className='flex items-center gap-10'>
             <button onClick={() => navigate('/')} 
-                    className={`text-left text-sm font-bold leading-4 dark:text-white text-[#272727] ${isHomeViewOpened ? 'before:absolute before:bg-[#51FF62] before:w-[70px] before:h-[70px] before:top-[-110%] before:opacity-60 before:left-[50px] before:rounded-full before:blur-2xl before:z-[-1] after:absolute after:bg-[#5158FF] after:w-[70px] after:h-[70px] after:left-[-20px] after:opacity-60 after:rounded-full after:blur-2xl after:z-[-1]' : ''}`}>
-                Конструктор<br /> рабочих программ
+                    className={`before:transition-all after:transition-all text-left text-sm font-bold leading-4 dark:text-white text-[#272727] before:absolute before:bg-[#51FF62] hover:before:opacity-60 hover:after:opacity-60 before:w-[70px] before:h-[70px] before:top-[-110%] before:left-[50px] before:rounded-full before:blur-2xl before:z-[-1] after:absolute after:bg-[#5158FF] after:w-[70px] after:h-[70px] after:left-[-20px] after:rounded-full after:blur-2xl after:z-[-1] ${isHomeViewOpened ? 'after:opacity-60 before:opacity-60' : 'before:opacity-0 after:opacity-0'}`}>
+                Конструктор<br/>рабочих программ
             </button>
 
             <div className='flex items-center gap-3'>
@@ -54,8 +54,8 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
                             </div>
                         </div>     
                     :
-                        <div className='relative before:absolute before:bg-[#489CFF] before:w-[70px] before:h-[70px] before:top-[150%] before:opacity-60 before:left-[50px] before:rounded-full before:blur-2xl before:z-[-1] after:absolute after:bg-[#9948FF] after:w-[70px] after:h-[70px] after:left-[100px] after:top-[150%] after:opacity-60 after:rounded-full after:blur-2xl after:z-[-1]'>
-                            <span className='text-secondary-text block text-xm'>Редактирование документа</span>
+                        <div className='relative before:absolute before:bg-[#489CFF] leading-4 before:w-[70px] before:h-[70px] before:top-[150%] before:opacity-60 before:left-[50px] before:rounded-full before:blur-2xl before:z-[-1] after:absolute after:bg-[#9948FF] after:w-[70px] after:h-[70px] after:left-[100px] after:top-[150%] after:opacity-60 after:rounded-full after:blur-2xl after:z-[-1]'>
+                            <span className='text-white block text-xm font-medium'>Редактирование<br/>документа</span>
                         </div>}   
             </div>
         </div>

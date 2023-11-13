@@ -44,7 +44,7 @@ const createGeneralProgramActions = (set: any): ProgramStateGeneralActions  => (
 const createDevelopersProgramActions = (set: any, get: any): ProgramStateDeveloperActions => ({
     addDeveloper: (newValue) => set((state: ProgramState) => ({program: {
         ...state.program,
-        developers: [...state.program?.developers, newValue]
+        developers: state.program ? [...state.program.developers, newValue] : [newValue]
     }})),
 
     updateDeveloper: (by) => set((state: ProgramState) => ({program: {

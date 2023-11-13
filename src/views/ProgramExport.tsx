@@ -4,8 +4,8 @@ import { useLocalStorage } from 'usehooks-ts'
 import { Program } from "../types/program"
 
 export default function ProgramExport() {
-    const [storageProgramList, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
     const [selectedProgramsList, setSelectedProgramsList] = useState<string[]>([])
+    const [storageProgramList, ] = useLocalStorage<Program[]>('program-list', [])
     
     function handleProgramClick(id: string, isSelected: boolean) {
         setSelectedProgramsList(prevState => {

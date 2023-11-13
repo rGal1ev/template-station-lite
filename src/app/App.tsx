@@ -8,6 +8,7 @@ import General from '../views/editorViews/General';
 import FirstLoad from '../views/FirstLoad';
 import { useUserPreferences } from '../store/preferences';
 import DeveloperEditor from '../views/editorViews/DeveloperEditor';
+import Specifications from '../views/editorViews/Specifications';
 
 export default function App() {
     const { getMeetingHandled } = useUserPreferences()
@@ -28,7 +29,7 @@ export default function App() {
 
                         <Route path='/program' element={<ProgramEditor />}>
                             <Route path='general' element={<General />} />
-                            <Route path='specifications' element={<h1>Общая характеристика</h1>} />
+                            <Route path='specifications' element={<Specifications />} />
                             <Route path='plan' element={<h1>Тематический план</h1>} />
                             <Route path='other' element={<h1>Прочее</h1>} />
                             <Route path='developer' element={<DeveloperEditor />} />

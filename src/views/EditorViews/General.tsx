@@ -1,12 +1,10 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent } from "react"
 
-import { Program } from "../../types/program"
 import { useProgramStore } from "../../store/program"
 import { useEditorStore } from "../../store/editor"
-import { Outlet, useNavigate, useOutlet, useOutletContext } from "react-router-dom"
+import { useNavigate, useOutletContext } from "react-router-dom"
 import Field, { FieldType } from "../../components/UI/Field"
 import DeveloperCard from "../../components/Editor/DeveloperCard/DeveloperCard"
-import { OpenType } from "../../types/editor"
 import { v4 as uuid } from "uuid"
 
 type DeveloperContext = {
@@ -18,19 +16,25 @@ export function useDeveloperContext() {
 }
 
 export default function General() {
-    const developmentYear = useProgramStore((state) => state.program?.developmentYear)
-    const academicSpecialty = useProgramStore((state) => state.program?.academicSpecialty)
-    const academicDiscipline = useProgramStore((state) => state.program?.academicDiscipline)
+    const { developmentYear, academicSpecialty, academicDiscipline } = useProgramStore((state) => ({
+        developmentYear: state.program?.developmentYear,
+        academicSpecialty: state.program?.academicSpecialty, 
+        academicDiscipline: state.program?.academicDiscipline
+    }))
 
-    const setDevelopmentYear = useProgramStore((state) => state.setDevelopmentYear)
-    const setAcademicSpecialty = useProgramStore((state) => state.setAcademicSpecialty)
-    const setAcademicDiscipline = useProgramStore((state) => state.setAcademicDiscipline)
+    const { setDevelopmentYear, setAcademicSpecialty, setAcademicDiscipline } = useProgramStore((state) => ({
+        setDevelopmentYear: state.setDevelopmentYear,
+        setAcademicSpecialty: state.setAcademicSpecialty,
+        setAcademicDiscipline: state.setAcademicDiscipline
+    }));
 
-    const addDeveloperToProgram = useProgramStore((state) => state.addDeveloper)
     const editingProgram = useProgramStore((state) => state.program)
-
     const updateDeveloperId = useEditorStore((state) => state.updateDeveloperId)
-    const removeDeveloperBy = useProgramStore((state) => state.removeDeveloper)
+
+    const { addDeveloperToProgram, removeDeveloperBy } = useProgramStore((state) => ({
+        addDeveloperToProgram: state.addDeveloper,
+        removeDeveloperBy: state.removeDeveloper
+    })) 
 
     const programDocumentName = () => {
         return `РП_${editingProgram?.academicDiscipline}_${editingProgram?.developmentYear}`
@@ -64,8 +68,8 @@ export default function General() {
 
         addDeveloperToProgram({
             id: newDeveloperID,
-            name: 'Новый разработчик',
-            post: 'Должность'
+            name: '',
+            post: ''
         })
 
         updateDeveloperId(newDeveloperID)
@@ -77,7 +81,7 @@ export default function General() {
                 <div className="flex gap-4">
                     <div className="mb-4">
                         <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
-                            Вычисляемое название документа
+                            Название документа
                         </label>
                         <Field value={programDocumentName()} readable={FieldType.READONLY} />
                     </div>
@@ -110,7 +114,6 @@ export default function General() {
                     <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
                         Разработчики
                     </label>
-                    <nav>
                         <ul className="flex flex-col gap-2">
                             {editingProgram?.developers.map(developer => (
                                 <DeveloperCard key={developer.id}
@@ -120,11 +123,14 @@ export default function General() {
                                                onDeleteClick={() => handleDeveloperDelete(developer.id)}/>
                             ))}
 
-                            <button onClick={handleNewDeveloper} className="text-sm px-6 py-2 rounded font-medium dark:bg-[#3A3A3A] bg-[#E1E1E1] text-white">
+                            {(editingProgram?.developers.length === 0) && 
+                                <div className="dark:bg-[#3A3A3A] bg-[#E1E1E1] w-fit dark:text-secondary-text py-1 px-3 rounded font-medium">Список разработчиков пуст</div>
+                            }
+
+                            <button onClick={handleNewDeveloper} className="text-sm px-6 py-2 rounded w-fit font-medium dark:bg-[#3A3A3A] bg-[#E1E1E1] text-white">
                                 Добавить разработчика
                             </button>
                         </ul>
-                    </nav>
                 </div>
             </div>
     );

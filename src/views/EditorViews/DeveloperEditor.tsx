@@ -2,18 +2,15 @@ import { useProgramStore } from "../../store/program"
 import Field from "../../components/UI/Field"
 import { ChangeEvent, useEffect, useState } from "react"
 import { Developer } from "../../types/program/index"
-import { Program } from "../../types/program"
-import { useLocation, useNavigate } from "react-router-dom"
-import { OpenType } from "../../types/editor"
+import { useNavigate } from "react-router-dom"
 import { useEditorStore } from "../../store/editor"
 
 export default function DeveloperEditor() {
-    const editingProgram = useProgramStore((state) => state.program)
+    const [developer, setDeveloper] = useState<Developer | undefined>(undefined)
+    
     const developerId = useEditorStore((state) => state.developerId)
 
-    const [developer, setDeveloper] = useState<Developer | undefined>(undefined)
     const getDeveloperBy = useProgramStore((state) => state.developerBy)
-    const addDeveloperToProgram = useProgramStore((state) => state.addDeveloper)
     const updateDeveloper = useProgramStore((state) => state.updateDeveloper)
 
     const navigate = useNavigate()
@@ -57,6 +54,7 @@ export default function DeveloperEditor() {
 
     return (
         <div className="flex-1 p-4">
+            <div className="flex gap-4">
             <div className="mb-4">
                 <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
                     Название разработчика
@@ -70,7 +68,8 @@ export default function DeveloperEditor() {
                 </label>
                 <Field value={developer?.post || ''} onChange={handleDeveloperPostChange} />
             </div>
-            <button onClick={() => navigate(-1)}>
+            </div>
+            <button onClick={() => navigate(-1)} className="text-sm px-6 py-2 rounded w-fit font-medium dark:bg-[#3A3A3A] bg-[#E1E1E1] text-white">
                 Вернуться назад
             </button>
         </div>

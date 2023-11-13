@@ -13,8 +13,6 @@ export default function ProgramCardList() {
     const [isProgramListShowed, setProgramListShowed] = useState<boolean>(true)
     const [isSideBarOpened, setSideBarOpened] = useState<boolean>(false)
     const [sideBarProgramId, setSideBarProgramId] = useState<string>('')
-
-    const [storageProgramList, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
     
     const editingProgram = useProgramStore((state) => state.program)
     const updateEditingProgram = useProgramStore((state) => state.update)
@@ -22,6 +20,8 @@ export default function ProgramCardList() {
     const clearEditingProgram = useProgramStore((state) => state.clear)
     const clearEditingState = useEditorStore((state) => state.clear)
     const setEditingProgram = useEditorStore((state) => state.updateId)
+
+    const [storageProgramList, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
 
     const navigate = useNavigate()
 

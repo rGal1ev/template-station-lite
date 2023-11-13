@@ -12,17 +12,16 @@ import { useEditorStore } from '../../store/editor'
 export default function AppHeader() {
     const [isProgramEditing, setProgramEditing] = useState<boolean>(false)
     const [isHomeViewOpened, setHomeViewOpened] = useState<boolean>(true)
+    const [isDarkMode, setDarkMode] = useState<boolean>(true)
 
     const editingProgram = useProgramStore((state) => state.program?.id)
-    const [storageProgramList, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
     const updateEditorProgramId = useEditorStore((state) => state.updateId)
+    const updateEditingProgram = useProgramStore((state) => state.update)
 
-    const [isDarkMode, setDarkMode] = useState<boolean>(true)
+    const [, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
 
     const location = useLocation()
     const navigate = useNavigate()
-
-    const updateEditingProgram = useProgramStore((state) => state.update)
 
     function saveNewProgram(program: Program) {
         setStorageProgramList((prevList) => [...prevList, program])
