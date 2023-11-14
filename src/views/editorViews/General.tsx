@@ -115,10 +115,10 @@ export default function General() {
                             ))}
 
                             {(editingProgram?.developers.length === 0) && 
-                                <div className="dark:bg-[#3A3A3A] bg-[#E1E1E1] w-fit dark:text-secondary-text py-1 px-3 rounded font-medium">Список разработчиков пуст</div>
+                                <div className="bg-[#3A3A3A] w-fit text-secondary-text py-1 px-3 rounded font-medium">Список разработчиков пуст</div>
                             }
 
-                            <button onClick={handleNewDeveloper} className="text-sm px-6 py-2 rounded w-fit font-medium dark:bg-[#3A3A3A] bg-[#E1E1E1] text-white">
+                            <button onClick={handleNewDeveloper} className="text-sm px-6 py-2 rounded w-fit font-medium bg-[#3A3A3A] text-white">
                                 Добавить разработчика
                             </button>
                         </ul>

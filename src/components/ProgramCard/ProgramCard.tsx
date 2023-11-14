@@ -32,19 +32,19 @@ export default function ProgramCard({id, title, onDuplicateClick, onInfoClick, o
     }
 
     return (
-        <div onClick={handleClick} className="overflow-clip group relative flex justify-between flex-col p-3 w-[350px] dark:bg-[#3A3A3A] bg-[#E1E1E1] rounded cursor-pointer dark:hover:border-[#575757] hover:border-[#BDBDBD] hover:border-2 border-2 border-transparent transition-all">
+        <div onClick={handleClick} className="overflow-clip group relative flex justify-between flex-col p-3 w-[350px] bg-[#3A3A3A] rounded cursor-pointer hover:border-[#575757] hover:border-2 border-2 border-transparent transition-all">
             <p className="font-medium truncate h-full mb-4">{title}</p>
             <div className="transition-all group-hover:opacity-0 opacity-100">
                 <div className="flex justify-between mb-2">
                     <span>Заполнено</span>
                     <span>34%</span>
                 </div>
-                <div className="h-[3px] dark:bg-[#5C5C5C] bg-[#B8B8B8] rounded overflow-clip">
+                <div className="h-[3px] bg-[#5C5C5C] rounded overflow-clip">
                     <div className="bg-sky-600 w-[30%] h-full"></div>
                 </div>
             </div>
 
-            <div className="flex dark:text-[#B9B9B9] text-[#272727] transition-all font-medium group-hover:visible group-hover:opacity-100 group-hover:bottom-0 invisible opacity-0 absolute bottom-[-10%] left-0 dark:bg-[#575757] bg-[#BDBDBD] w-full">
+            <div className="flex text-[#B9B9B9] transition-all font-medium group-hover:visible group-hover:opacity-100 group-hover:bottom-0 invisible opacity-0 absolute bottom-[-10%] left-0 bg-[#575757] w-full">
                 <button className='hover:bg-accent hover:text-white block px-2 py-2 w-full text-left font-medium'>
                     Сформировать
                 </button>

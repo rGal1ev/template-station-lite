@@ -49,7 +49,7 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
     return (
         <div className='flex items-center gap-10'>
             <button onClick={() => navigate('/')} 
-                    className={`before:transition-all after:transition-all text-left text-sm font-bold leading-4 dark:text-neutral-50 text-[#272727] before:absolute before:bg-[#51FF62] hover:before:opacity-60 hover:after:opacity-60 before:w-[70px] before:h-[70px] before:top-[-110%] before:left-[50px] before:rounded-full before:blur-2xl before:z-[-1] after:absolute after:bg-[#5158FF] after:w-[70px] after:h-[70px] after:left-[-20px] after:rounded-full after:blur-2xl after:z-[-1] ${isHomeViewOpened ? 'after:opacity-60 before:opacity-60' : 'before:opacity-0 after:opacity-0'}`}>
+                    className={`before:transition-all after:transition-all text-left text-sm font-bold leading-4 text-neutral-50 before:absolute before:bg-[#51FF62] hover:before:opacity-60 hover:after:opacity-60 before:w-[70px] before:h-[70px] before:top-[-110%] before:left-[50px] before:rounded-full before:blur-2xl before:z-[-1] after:absolute after:bg-[#5158FF] after:w-[70px] after:h-[70px] after:left-[-20px] after:rounded-full after:blur-2xl after:z-[-1] ${isHomeViewOpened ? 'after:opacity-60 before:opacity-60' : 'before:opacity-0 after:opacity-0'}`}>
                 Конструктор<br/>рабочих программ
             </button>
 
@@ -59,8 +59,8 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
                         <div className='flex gap-3 items-center'>
                             <p className='text-neutral-400 font-medium w-[150px] leading-4'>Ваши документы сохранены локально</p>     
                             <div className='flex'>
-                                <button onClick={() => openFilePicker()} className='transition-all py-1 px-3 dark:bg-neutral-600 border-2 border-transparent hover:border-neutral-400 rounded-l-full font-medium'>Импортировать</button>
-                                <button onClick={() => navigate('/export')} className='transition-all py-1 px-3 dark:bg-neutral-700 border-2 border-transparent hover:border-neutral-400 rounded-r-full font-medium'>Экспортировать</button>
+                                <button onClick={() => openFilePicker()} className='transition-all py-1 px-3 bg-neutral-600 border-2 border-transparent hover:border-neutral-400 rounded-l-full font-medium'>Импортировать</button>
+                                <button onClick={() => navigate('/export')} className='transition-all py-1 px-3 bg-neutral-700 border-2 border-transparent hover:border-neutral-400 rounded-r-full font-medium'>Экспортировать</button>
                             </div>
                         </div>   
                         
@@ -76,7 +76,7 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
 
                             <Field style={FieldStyle.TRANSPARENT} onChange={handleProgramTitleChange} value={editingProgramTitle} />
 
-                            <button className="ml-2 transition-all py-1 px-3 dark:bg-neutral-600 border-2 border-transparent hover:border-neutral-400 rounded-full font-medium">
+                            <button className="ml-2 transition-all py-1 px-3 bg-neutral-600 border-2 border-transparent hover:border-neutral-400 rounded-full font-medium">
                                 Отметить как завершенное
                             </button>
                         </div> 

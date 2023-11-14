@@ -42,12 +42,12 @@ export default function ProgramExport() {
         <div className=" p-4">
             {selectedProgramsList.length === 0 ? 
             <div className="flex mb-2 gap-1">
-                <span className="dark:bg-[#3A3A3A] bg-[#E1E1E1] dark:text-secondary-text text-[#272727] py-1 px-3 rounded font-medium">Выберите хотя-бы один элемент</span>
+                <span className="bg-[#3A3A3A] text-secondary-text py-1 px-3 rounded font-medium">Выберите хотя-бы один элемент</span>
             </div>
             :
             <div className="flex mb-2 gap-1">
-                <span className="dark:bg-[#3A3A3A] bg-[#E1E1E1] dark:text-secondary-text text-[#272727] py-1 px-3 rounded font-medium">Выбрано</span>
-                <span className="dark:bg-[#3A3A3A] bg-[#E1E1E1] dark:text-white text-[#272727] py-1 px-3 rounded">{selectedProgramsList.length}</span>
+                <span className="bg-[#3A3A3A] text-secondary-text py-1 px-3 rounded font-medium">Выбрано</span>
+                <span className="bg-[#3A3A3A] text-white py-1 px-3 rounded">{selectedProgramsList.length}</span>
             </div>
             }
             
@@ -61,7 +61,7 @@ export default function ProgramExport() {
             </div>
 
             <div>
-                <button onClick={handleExporting} disabled={selectedProgramsList.length === 0} className={`transition-all text-sm px-6 py-2 rounded  font-medium ${selectedProgramsList.length === 0 ? 'dark:bg-[#3A3A3A] bg-[#E1E1E1] text-secondary-text' : 'bg-accent text-white'}`}>Экспортировать и скачать</button>
+                <button onClick={handleExporting} disabled={selectedProgramsList.length === 0} className={`transition-all text-sm px-6 py-2 rounded font-medium ${selectedProgramsList.length === 0 ? 'bg-[#3A3A3A] text-secondary-text' : 'bg-sky-600 text-white'}`}>Экспортировать и скачать</button>
             </div>
         </div>
     );
