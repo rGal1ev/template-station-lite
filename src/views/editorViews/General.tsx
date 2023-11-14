@@ -1,19 +1,10 @@
 import { ChangeEvent } from "react"
-
 import { useProgramStore } from "../../store/program"
 import { useEditorStore } from "../../store/editor"
 import { useNavigate, useOutletContext } from "react-router-dom"
 import Field, { FieldType } from "../../components/UI/Field"
 import DeveloperCard from "../../components/Editor/DeveloperCard/DeveloperCard"
 import { v4 as uuid } from "uuid"
-
-type DeveloperContext = {
-    developerId: string | undefined
-}
-
-export function useDeveloperContext() {
-    return useOutletContext<DeveloperContext>()
-}
 
 export default function General() {
     const { developmentYear, academicSpecialty, academicDiscipline } = useProgramStore((state) => ({
@@ -34,7 +25,7 @@ export default function General() {
     const { addDeveloperToProgram, removeDeveloperBy } = useProgramStore((state) => ({
         addDeveloperToProgram: state.addDeveloper,
         removeDeveloperBy: state.removeDeveloper
-    })) 
+    }))
 
     const programDocumentName = () => {
         return `РП_${editingProgram?.academicDiscipline}_${editingProgram?.developmentYear}`
