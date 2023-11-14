@@ -72,7 +72,7 @@ export default function DeveloperEditor() {
                 <Field value={developer?.post || ''} onChange={handleDeveloperPostChange} />
             </div>
             </div>
-            <button onClick={() => navigate(-1)} className="text-sm px-6 py-2 rounded w-fit font-medium dark:bg-[#3A3A3A] bg-[#E1E1E1] text-white">
+            <button onClick={() => navigate(-1)} className="text-sm px-6 py-2 rounded w-fit font-medium bg-[#3A3A3A] text-white">
                 Вернуться назад
             </button>
         </div>

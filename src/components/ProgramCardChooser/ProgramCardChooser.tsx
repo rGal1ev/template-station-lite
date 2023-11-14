@@ -16,7 +16,7 @@ export default function ProgramCardChooser({id, title, onClick}: ProgramCardChoo
     }
 
     return (
-        <div onClick={handleClick} className={`overflow-clip relative flex justify-between flex-col p-3 w-[350px] bg-[#3A3A3A] rounded cursor-pointer border-2 border-transparent transition-all ${isSelected ? ' border-sky-600' : 'hover:border-[#575757]'}`}>
+        <div onClick={handleClick} className={`overflow-clip relative flex justify-between flex-col p-3 w-[350px] bg-[#3A3A3A] rounded cursor-pointer border-2 transition-all ${isSelected ? ' border-sky-600' : 'hover:border-[#575757] border-transparent '}`}>
             <p className="font-medium truncate h-full mb-4">{title}</p>
             <div>
                 <div className="flex justify-between mb-2">
