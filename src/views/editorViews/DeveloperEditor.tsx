@@ -9,7 +9,6 @@ export default function DeveloperEditor() {
     const [developer, setDeveloper] = useState<Developer | undefined>(undefined)
     
     const developerId = useEditorStore((state) => state.developerId)
-
     const getDeveloperBy = useProgramStore((state) => state.developerBy)
     const updateDeveloper = useProgramStore((state) => state.updateDeveloper)
 
@@ -54,6 +53,10 @@ export default function DeveloperEditor() {
 
     return (
         <div className="flex-1 p-4">
+            <div className=" bg-neutral-700 p-4 rounded mb-4 border-2 border-neutral-500">
+                <p className="font-semibold text-sm w-[300px] leading-5 mb-2">Впишите одного из разработчиков учебной программы</p>
+                <p className="text-neutral-400 w-[350px]">Информация о разработчиках помещается на второй странице документа</p>
+            </div>
             <div className="flex gap-4">
             <div className="mb-4">
                 <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">

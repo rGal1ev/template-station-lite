@@ -4,6 +4,7 @@ export enum CompetenceType {
 }
 
 export interface Competence {
+    id: string
     type: CompetenceType
     title: string
 }

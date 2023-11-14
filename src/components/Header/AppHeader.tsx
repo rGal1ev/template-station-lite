@@ -14,7 +14,7 @@ export default function AppHeader() {
     const [isHomeViewOpened, setHomeViewOpened] = useState<boolean>(true)
     const [isDarkMode, setDarkMode] = useState<boolean>(true)
 
-    const editingProgram = useProgramStore((state) => state.program?.id)
+    const editingProgram = useProgramStore((state) => state.program)
     const updateEditorProgramId = useEditorStore((state) => state.updateId)
     const updateEditingProgram = useProgramStore((state) => state.update)
 
@@ -70,7 +70,7 @@ export default function AppHeader() {
         if (editingProgram === undefined) return
 
         const programToExport = JSON.parse(JSON.stringify([editingProgram]))
-        programToExport.id = ''
+        programToExport[0].id = ''
 
         const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
             JSON.stringify(programToExport)

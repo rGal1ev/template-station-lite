@@ -1,22 +1,13 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { Program } from '../types/program'
-import { Developer } from '../types/program/index'
+import { Competence, Developer } from "../../types/program/index"
+import { ProgramState } from "./state"
 
-interface ProgramState {
-    program: Program | undefined,
-
-    update: (newProgram: Program) => void
-    clear: () => void
-}
-
-interface ProgramStateGeneralActions {
+export interface ProgramStateGeneralActions {
     setDevelopmentYear: (newValue: string) => void
     setAcademicSpecialty: (newValue: string) => void
     setAcademicDiscipline: (newValue: string) => void
 }
 
-interface ProgramStateDeveloperActions {
+export interface ProgramStateDeveloperActions {
     addDeveloper: (developer: Developer) => void
     updateDeveloper: (developer: Developer) => void
 
@@ -24,7 +15,15 @@ interface ProgramStateDeveloperActions {
     developerBy: (by: string) => Developer | undefined
 }
 
-const createGeneralProgramActions = (set: any): ProgramStateGeneralActions  => ({
+export interface ProgramStateCompetenciesActions {
+    addCompetence: (competence: Competence) => void
+    updateCompetence: (competence: Competence) => void
+
+    removeCompetence: (by: string) => void
+    competenceBy: (by: string) => void
+}
+
+export const createGeneralProgramActions = (set: any): ProgramStateGeneralActions  => ({
     setDevelopmentYear: (newValue) => set((state: ProgramState) => ({program: {
         ...state.program,
         developmentYear: newValue
@@ -41,7 +40,7 @@ const createGeneralProgramActions = (set: any): ProgramStateGeneralActions  => (
     }})),
 })
 
-const createDevelopersProgramActions = (set: any, get: any): ProgramStateDeveloperActions => ({
+export const createDevelopersProgramActions = (set: any, get: any): ProgramStateDeveloperActions => ({
     addDeveloper: (newValue) => set((state: ProgramState) => ({program: {
         ...state.program,
         developers: state.program ? [...state.program.developers, newValue] : [newValue]
@@ -65,26 +64,26 @@ const createDevelopersProgramActions = (set: any, get: any): ProgramStateDevelop
     }}))
 })
 
-const useProgramStore = create<ProgramState & 
-                               ProgramStateGeneralActions & 
-                               ProgramStateDeveloperActions>()(
-    persist(
-        (set, get) => ({
-            program: undefined,
+export const createCompetenciesProgramActions = (set: any, get: any): ProgramStateCompetenciesActions => ({
+    addCompetence: (newValue) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        competencies: state.program ? [...state.program.competencies, newValue] : [newValue]
+    }})),
 
-            update: (newProgram) => set(() => ({program: {
-                ...newProgram
-            }})),
-            
-            clear: () => set(() => ({program: undefined})),
-            ...createGeneralProgramActions(set),
-            ...createDevelopersProgramActions(set, get)
-        }),
+    updateCompetence: (by) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        developers: state.program?.competencies.map(competence => {
+            if (competence.id === by.id) {
+                return by
+            }
 
-        {
-            name: 'current-program'
-        }
-    )
-)
+            return competence
+        })
+    }})),
 
-export { useProgramStore }
+    removeCompetence: (by) => get().program.competencies.find((competence: Competence) => competence.id === by),
+    competenceBy: (by) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        developers: state.program?.competencies.filter(competence => competence.id != by)
+    }}))
+})

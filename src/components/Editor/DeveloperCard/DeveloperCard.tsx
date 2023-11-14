@@ -15,13 +15,13 @@ export default function DeveloperCard({ name, post, onDeleteClick, onClick }: De
     }
 
     return (
-        <li onClick={onClick} className="group w-full bg-[#323232] rounded flex overflow-clip">
+        <li onClick={onClick} className="group transition-all w-full bg-[#3A3A3A] border-2 border-transparent rounded flex overflow-clip hover:border-[#575757]">
             <button className=" text-left p-3 w-full">
                 <p className="font-semibold">{name === '' ? 'Имя не указано' : name}</p>
                 <span className="text-secondary-text">{post === '' ? 'Должность не указана' : post}</span>
             </button>
 
-            <button onClick={handleDeleteClick} className="transition-all px-6 bg-[#444444] group-hover:opacity-100 opacity-0">
+            <button onClick={handleDeleteClick} className="transition-all px-6 bg-[#575757] invisible translate-x-[50%] group-hover:translate-x-0 group-hover:visible group-hover:opacity-100 opacity-0">
                 Удалить
             </button>
         </li>
