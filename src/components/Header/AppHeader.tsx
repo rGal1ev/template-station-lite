@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useProgramStore } from '../../store/program'
 import { useLocalStorage } from 'usehooks-ts'
-import { Sun, Moon } from 'react-feather'
 
 import { generateEmptyProgram } from '../../helpers/generateEmptyProgram'
 import HeaderStatusView from '../HeaderStatusView/HeaderStatusView'
@@ -12,7 +11,6 @@ import { useEditorStore } from '../../store/editor'
 export default function AppHeader() {
     const [isProgramEditing, setProgramEditing] = useState<boolean>(false)
     const [isHomeViewOpened, setHomeViewOpened] = useState<boolean>(true)
-    const [isDarkMode, setDarkMode] = useState<boolean>(true)
 
     const editingProgram = useProgramStore((state) => state.program)
     const updateEditorProgramId = useEditorStore((state) => state.updateId)
@@ -39,10 +37,6 @@ export default function AppHeader() {
         saveNewProgram(newEmptyProgram)
 
         navigate(`/program/general`)
-    }
-
-    function handleModeSwitch() {
-        setDarkMode(prev => !prev)
     }
 
     function processRouteChange() {
@@ -88,36 +82,28 @@ export default function AppHeader() {
         processRouteChange()
     }, [location])
 
-    useEffect(() => {
-        document.documentElement.classList.toggle('dark')
-    }, [isDarkMode])
-
     return (
-        <header className="relative z-[1] flex items-center justify-between dark:bg-header-bg bg-[#EBEBEB] h-14 px-3 overflow-clip border-b-2 border-[#808080]">
+        <header className="relative z-[1] flex items-center justify-between bg-transparent h-14 px-3 overflow-clip">
             <div className='flex items-center gap-10'>
                 <HeaderStatusView isHomeViewOpened={isHomeViewOpened} isProgramEditing={isProgramEditing} />
             </div>
 
-            <div className='flex items-center gap-2'>
-                <button onClick={handleModeSwitch} className='p-2 rounded transition-all border-2 border-[#4A4A4A] hover:[#4A4A4A] hover:bg-[#4A4A4A]'>
-                    {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                </button>
-
+            <div className='flex items-center gap-1'>
                 {isProgramEditing && 
                 <>
-                    <button onClick={createEmptyProgram} className="transition-all border-2 border-[#4A4A4A] hover:border-red-500 hover:bg-red-500 text-sm px-6 py-2 rounded text-white font-medium">
+                    <button onClick={createEmptyProgram} className="transition-all bg-neutral-700 hover:bg-red-600 text-sm px-6 py-2 rounded-l-3xl rounded-r-md text-white font-medium">
                         Удалить
                     </button>
 
-                    <button onClick={handleExporting} className="transition-all hover:bg-accent hover:border-accent border-2 border-[#4A4A4A] text-sm px-6 py-2 rounded text-white font-medium">
+                    <button onClick={handleExporting} className="transition-all bg-neutral-700 hover:bg-sky-700 text-sm px-6 py-2 rounded-l-md rounded-r-3xl text-white font-medium">
                         Экспортировать документ
                     </button>
                 </>}
                 
                 { isHomeViewOpened &&  
-                <button onClick={createEmptyProgram} className="transition-all hover:bg-accent hover:border-accent border-2 border-[#4A4A4A] text-sm px-6 py-2 rounded text-white font-medium">
+                <button onClick={createEmptyProgram} className="transition-all bg-sky-600 hover:bg-sky-700 text-sm px-6 py-2 rounded-full text-white font-medium">
                     Создать программу
-                </button>}    
+                </button> }    
             </div>
         </header>
     );

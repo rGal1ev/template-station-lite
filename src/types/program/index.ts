@@ -10,6 +10,7 @@ export interface Program {
     developmentYear: string
     academicSpecialty: string
     academicDiscipline: string
+    createdAt: string
 
     developers: Developer[]
     competencies: Competence[]

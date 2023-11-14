@@ -16,6 +16,19 @@ const useProgramStore = create<ProgramState &
             update: (newProgram) => set(() => ({program: {
                 ...newProgram
             }})),
+
+            updateTitle: (newTitle) => set((state) => {
+                if (state.program === undefined) return {
+                    program: undefined
+                }
+
+                return {
+                    program: {
+                        ...state.program,
+                        title: newTitle
+                    }
+                }
+            }),
             
             clear: () => set(() => ({program: undefined})),
             ...createGeneralProgramActions(set),

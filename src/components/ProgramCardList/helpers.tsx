@@ -2,6 +2,12 @@ import { Program } from "../../types/program";
 import { v4 as uuid } from "uuid";
 
 export function duplicateProgram(program: Program): Program | undefined {
+    const currentDate = new Date();
+
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+
     if (program === undefined) {
         return
     }
@@ -9,6 +15,7 @@ export function duplicateProgram(program: Program): Program | undefined {
     const duplicatedProgram: Program = JSON.parse(JSON.stringify(program));
     
     duplicatedProgram.id = uuid()
+    duplicatedProgram.createdAt = `${year}.${month}.${day}`
     duplicatedProgram.title = `Дублировано ${duplicatedProgram.title}`
 
     return duplicatedProgram

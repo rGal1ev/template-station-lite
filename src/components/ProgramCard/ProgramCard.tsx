@@ -40,7 +40,7 @@ export default function ProgramCard({id, title, onDuplicateClick, onInfoClick, o
                     <span>34%</span>
                 </div>
                 <div className="h-[3px] dark:bg-[#5C5C5C] bg-[#B8B8B8] rounded overflow-clip">
-                    <div className="bg-accent w-[30%] h-full"></div>
+                    <div className="bg-sky-600 w-[30%] h-full"></div>
                 </div>
             </div>
 

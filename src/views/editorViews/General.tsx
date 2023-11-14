@@ -1,7 +1,7 @@
 import { ChangeEvent } from "react"
 import { useProgramStore } from "../../store/program"
 import { useEditorStore } from "../../store/editor"
-import { useNavigate, useOutletContext } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Field, { FieldType } from "../../components/UI/Field"
 import DeveloperCard from "../../components/Editor/DeveloperCard/DeveloperCard"
 import { v4 as uuid } from "uuid"

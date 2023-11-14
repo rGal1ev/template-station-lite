@@ -25,6 +25,17 @@ export default function ProgramCardList() {
 
     const navigate = useNavigate()
 
+    const groupedByDatePrograms = storageProgramList.reduce((acc, item) => {
+        const date = item.createdAt
+  
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+  
+        acc[date].push(item);
+        return acc;
+      }, {} as Record<string, Program[]>);
+
     function includeDuplicatedProgram(duplicatedProgram: Program) {
         setStorageProgramList((prev) => ([...prev, duplicatedProgram]))
     }
@@ -85,17 +96,22 @@ export default function ProgramCardList() {
                 }
             </div>
 
-            <div className="flex flex-wrap gap-3">
-                {isProgramListShowed && storageProgramList.map(program => (
-                    <ProgramCard onClick={(id) => handleProgramOpening(id)}
-                                 onDuplicateClick={(id) => handleProgramDuplication(id)}
-                                 onInfoClick={(id) => handleSideBarOpen(id)}
-                                 onDeleteClick={(id) => handleProgramDelete(id)}
-                                 key={program.id} 
-                                 id={program.id} 
-                                 title={program.title} />
-                ))}
-            </div>
+            {isProgramListShowed && Object.keys(groupedByDatePrograms).map(date => (
+                <div key={date}>
+                    <h3 className="text-neutral-400 mb-2 font-semibold">{date}</h3>
+                    <div className="flex flex-wrap gap-3 mb-4">
+                        {groupedByDatePrograms[date].map((program: Program) => (
+                            <ProgramCard onClick={(id) => handleProgramOpening(id)}
+                                onDuplicateClick={(id) => handleProgramDuplication(id)}
+                                onInfoClick={(id) => handleSideBarOpen(id)}
+                                onDeleteClick={(id) => handleProgramDelete(id)}
+                                key={program.id} 
+                                id={program.id} 
+                                title={program.title} />
+                        ))}
+                    </div>
+                </div>
+            ))}
 
             <ProgramSideBar onClose={handleSideBarClose} programId={sideBarProgramId} isOpened={isSideBarOpened} />
         </div>
