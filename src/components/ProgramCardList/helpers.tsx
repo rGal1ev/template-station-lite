@@ -17,6 +17,7 @@ export function duplicateProgram(program: Program): Program | undefined {
     duplicatedProgram.id = uuid()
     duplicatedProgram.createdAt = `${year}.${month}.${day}`
     duplicatedProgram.title = `Дублировано ${duplicatedProgram.title}`
+    duplicatedProgram.isPinned = false
 
     return duplicatedProgram
 }
@@ -27,6 +28,17 @@ export function getProgramById(by: string, programList: Program[]): Program | un
 
 export function deleteProgramFromList(by: string, programList: Program[]): Program[] {
     return [...programList.filter(program => program.id !== by)]
+}
+
+export function pinProgramFromList(by: string, programList: Program[]): Program[] {
+    return programList.map(programInList => {
+        if (programInList.id === by) {
+            programInList.isPinned = !programInList.isPinned
+            return programInList
+        }
+
+        return programInList
+    })
 }
 
 export function updateProgramInList(program: Program, programList: Program[]) {

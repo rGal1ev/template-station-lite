@@ -15,6 +15,7 @@ export function generateEmptyProgram(): Program {
         academicSpecialty: '',
         academicDiscipline: '',
         createdAt: `${year}.${month}.${day}`,
+        isPinned: false,
 
         developers: [],
         competencies: [],

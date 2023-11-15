@@ -51,7 +51,7 @@ export default function ProgramExport() {
             </div>
             }
             
-            <div className="flex flex-wrap gap-3 mb-4">
+            <div className="flex flex-wrap gap-3 mb-2">
                 {storageProgramList.map(program => (
                     <ProgramCardChooser key={program.id} 
                                         id={program.id} 

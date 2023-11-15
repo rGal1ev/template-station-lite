@@ -17,6 +17,19 @@ const useProgramStore = create<ProgramState &
                 ...newProgram
             }})),
 
+            updatePinned: (newValue) => set((state) => {
+                if (state.program === undefined) return {
+                    program: undefined
+                }
+
+                return {
+                    program: {
+                        ...state.program,
+                        isPinned: newValue
+                    }
+                }
+            }),
+
             updateTitle: (newTitle) => set((state) => {
                 if (state.program === undefined) return {
                     program: undefined

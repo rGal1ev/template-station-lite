@@ -1,17 +1,19 @@
-import { Trash, Info, Plus } from 'react-feather'
+import { Trash, Info, Plus, Paperclip } from 'react-feather'
 import { MouseEvent } from 'react'
 
 interface ProgramCardProps {
     id: string
     title: string
+    isPinned: boolean
 
     onClick: (id: string) => void
     onDuplicateClick: (id: string) => void
     onInfoClick: (id: string) => void
     onDeleteClick: (id: string) => void
+    onPinnedClick: (id: string) => void
 }
  
-export default function ProgramCard({id, title, onDuplicateClick, onInfoClick, onDeleteClick, onClick }: ProgramCardProps) {
+export default function ProgramCard({id, title, onDuplicateClick, onInfoClick, onDeleteClick, onClick, isPinned, onPinnedClick }: ProgramCardProps) {
     function handleDuplicateClick(e: MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
         onDuplicateClick(id)
@@ -25,6 +27,11 @@ export default function ProgramCard({id, title, onDuplicateClick, onInfoClick, o
     function handleInfoOpening(e: MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
         onInfoClick(id)
+    }
+
+    function handlePin(e: MouseEvent<HTMLButtonElement>) {
+        e.stopPropagation()
+        onPinnedClick(id)
     }
 
     function handleClick() {
@@ -50,6 +57,9 @@ export default function ProgramCard({id, title, onDuplicateClick, onInfoClick, o
                 </button>
                 <button onClick={handleDelete} className='px-2 hover:bg-[#BF3C3C] hover:text-white'>
                     <Trash size={20}/>
+                </button>
+                <button onClick={handlePin} className={`px-2 hover:bg-accent ${isPinned && 'text-white'} hover:text-white`}>
+                    <Paperclip size={20}/>
                 </button>
                 <button onClick={handleDuplicateClick} className='px-2 hover:bg-accent hover:text-white'>
                     <Plus size={20}/>

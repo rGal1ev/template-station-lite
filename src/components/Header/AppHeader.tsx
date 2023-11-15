@@ -78,6 +78,7 @@ export default function AppHeader() {
         link.click();
     }
 
+
     useEffect(() => {
         processRouteChange()
     }, [location])
@@ -99,7 +100,7 @@ export default function AppHeader() {
                         Экспортировать документ
                     </button>
                 </>}
-                
+
                 { isHomeViewOpened &&  
                 <button onClick={createEmptyProgram} className="transition-all bg-sky-600 hover:bg-sky-700 text-sm px-6 py-2 rounded-full text-white font-medium">
                     Создать программу
