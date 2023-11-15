@@ -16,7 +16,7 @@ export function duplicateProgram(program: Program): Program | undefined {
     
     duplicatedProgram.id = uuid()
     duplicatedProgram.createdAt = `${year}.${month}.${day}`
-    duplicatedProgram.title = `Дублировано ${duplicatedProgram.title}`
+    duplicatedProgram.title = `[Дублировано] ${duplicatedProgram.title}`
     duplicatedProgram.isPinned = false
 
     return duplicatedProgram

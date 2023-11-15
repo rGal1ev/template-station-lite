@@ -63,8 +63,9 @@ export default function AppHeader() {
     function handleExporting() {
         if (editingProgram === undefined) return
 
-        const programToExport = JSON.parse(JSON.stringify([editingProgram]))
+        const programToExport: Program[] = JSON.parse(JSON.stringify([editingProgram]))
         programToExport[0].id = ''
+        programToExport[0].isPinned = false
 
         const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
             JSON.stringify(programToExport)

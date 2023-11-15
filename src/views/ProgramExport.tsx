@@ -22,7 +22,9 @@ export default function ProgramExport() {
         const preparedExportablePrograms: Program[] = exportablePrograms.map(program => {
             return {
                 ...program,
-                id: ''
+                title: '[Импортировано] ' + program.title,
+                id: '',
+                isPinned: false
             }
         })
 

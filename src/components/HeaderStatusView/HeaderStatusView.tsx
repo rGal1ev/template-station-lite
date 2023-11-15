@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from "react"
+import { ChangeEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import { useFilePicker } from "use-file-picker"
 
@@ -20,11 +20,18 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
     const editingProgramTitle = useProgramStore((state) => state.program?.title)
     const updateProgramTitle = useProgramStore((state) => state.updateTitle)
 
-    const { openFilePicker, filesContent } = useFilePicker({
+    const navigate = useNavigate()
+
+    const { openFilePicker, filesContent, clear } = useFilePicker({
         accept: '.json',
     });
 
-    const navigate = useNavigate()
+    filesContent.map((file) => {
+        const importedPrograms: Program[] = JSON.parse(file.content)
+        handleProgramsImport(importedPrograms)
+
+        clear()
+    })
 
     function handleProgramsImport(importedPrograms: Program[]) {
         const importedProgramsWithNewID = updateImportedProgramsId(importedPrograms)
@@ -38,14 +45,6 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
         updateProgramTitle(e.target.value)
     }
 
-    useEffect(() => {
-        filesContent.map((file) => {
-            const importedPrograms: Program[] = JSON.parse(file.content)
-            handleProgramsImport(importedPrograms)
-        })
-
-    }, [filesContent])
-
     return (
         <div className='flex items-center gap-10'>
             <button onClick={() => navigate('/')} 
@@ -53,11 +52,11 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
                 Конструктор<br/>рабочих программ
             </button>
 
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-3 '>
                     <span className='w-[2px] h-[15px] bg-neutral-400 rounded'></span> 
                     {!isProgramEditing ?  
                         <div className='flex gap-3 items-center'>
-                            <p className='text-neutral-400 font-medium w-[150px] leading-4'>Ваши документы сохранены локально</p>     
+                            <p className='text-neutral-400 font-medium w-[150px] leading-4 select-none'>Ваши документы сохранены локально</p>     
                             <div className='flex'>
                                 <button onClick={() => openFilePicker()} className='transition-all py-1 px-3 bg-neutral-600 border-2 border-transparent hover:border-neutral-400 rounded-l-full font-medium'>Импортировать</button>
                                 <button onClick={() => navigate('/export')} className='transition-all py-1 px-3 bg-neutral-700 border-2 border-transparent hover:border-neutral-400 rounded-r-full font-medium'>Экспортировать</button>

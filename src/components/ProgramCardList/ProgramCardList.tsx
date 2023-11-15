@@ -99,7 +99,7 @@ export default function ProgramCardList() {
         <div className=" p-4">
             {!(pinnedPrograms.length === 0) &&
                 <>
-                    <div className="flex gap-1 items-center mb-2">
+                    <div className="flex gap-1 items-center mb-2 select-none">
                         <Paperclip size={15} />
                         <p className="font-semibold">Закрепленные</p>
                     </div>
@@ -120,7 +120,7 @@ export default function ProgramCardList() {
                 </>
             }
             
-            <div className="flex gap-2 items-center mb-2">
+            <div className="flex gap-2 items-center mb-2 select-none">
                 <p className="font-semibold">Все документы</p>
             </div>
 

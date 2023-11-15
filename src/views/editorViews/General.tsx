@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import Field, { FieldType } from "../../components/UI/Field"
 import DeveloperCard from "../../components/Editor/DeveloperCard/DeveloperCard"
 import { v4 as uuid } from "uuid"
+import Select from 'react-select'
 
 export default function General() {
     const { developmentYear, academicSpecialty, academicDiscipline } = useProgramStore((state) => ({
@@ -37,12 +38,12 @@ export default function General() {
         setDevelopmentYear(e.target.value)
     }
 
-    function handleAcademicSpecialtyChange(e: ChangeEvent<HTMLInputElement>) {
-        setAcademicSpecialty(e.target.value)
+    function onAcademicSpecialtyChange(option: any) {
+        setAcademicSpecialty(option.value)
     }
 
-    function handleAcademicDisciplineChange(e: ChangeEvent<HTMLInputElement>) {
-        setAcademicDiscipline(e.target.value)
+    function onAcademicDisciplineChange(option: any) {
+        setAcademicDiscipline(option.value)
     }
 
     function handleDeveloperClick(id: string) {
@@ -66,6 +67,16 @@ export default function General() {
         updateDeveloperId(newDeveloperID)
         navigate('../developer')
     }
+
+    const specialties = [
+        {value: "Программирование информационных система", label: "Программирование информационных система"},
+        {value: "Сетевое и системное администрирование", label: "Сетевое и системное администрирование"},
+    ]
+
+    const disciplines = [
+        {value: "01.02.03", label: "01.02.03"},
+        {value: "01.02.04", label: "01.02.04"}
+    ]
 
     return (
         <div className="flex-1 gap-4 p-4">   
@@ -91,13 +102,65 @@ export default function General() {
                         <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
                             Специальность
                         </label>
-                        <Field onChange={handleAcademicSpecialtyChange} value={academicSpecialty || ''}/>
+                        <div className=' w-[220px]'>
+                            <Select styles={{
+                                        option: (baseStyles) => ({
+                                            ...baseStyles,
+                                            color: 'white'
+                                        }),
+                                    }}
+                                    placeholder="Выберите специальность"
+                                    options={specialties}
+                                    defaultValue={{
+                                        value: academicSpecialty,
+                                        label: academicSpecialty
+                                    }}
+                                    onChange={onAcademicSpecialtyChange}
+                                    noOptionsMessage={() => 'Список пуст'} 
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary: '#525252',
+                                            neutral0: '#404040',
+                                            neutral80: 'white',
+                                            primary25: '#525252',
+                                            primary50: '#A3A3A3',
+                                        },
+                                    })}/>
+                        </div>
                     </div>
                     <div className="mb-4">
                         <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
                             Дисциплина
                         </label>
-                        <Field onChange={handleAcademicDisciplineChange} value={academicDiscipline || ''}/>
+                        <div className=' w-[220px]'>
+                            <Select styles={{
+                                        option: (baseStyles) => ({
+                                            ...baseStyles,
+                                            color: 'white'
+                                        }),
+                                    }} 
+                                    placeholder="Выберите дисциплину"
+                                    options={disciplines}
+                                    defaultValue={{
+                                        value: academicDiscipline,
+                                        label: academicDiscipline
+                                    }}
+                                    onChange={onAcademicDisciplineChange}
+                                    noOptionsMessage={() => 'Список пуст'} 
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        colors: {
+                                        ...theme.colors,
+                                        primary: '#525252',
+                                        neutral0: '#404040',
+                                        neutral80: 'white',
+                                        primary25: '#525252',
+                                        primary50: '#A3A3A3'
+                                        },
+                                    })}/>
+                        </div>
                     </div>
                 </div>
 

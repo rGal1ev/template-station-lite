@@ -60,7 +60,7 @@ export default function DeveloperEditor() {
             <div className="flex gap-4">
             <div className="mb-4">
                 <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
-                    Название разработчика
+                    Имя разработчика
                 </label>
                 <Field value={developer?.name || ''} onChange={handleDeveloperNameChange} />
             </div>
