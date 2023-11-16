@@ -19,6 +19,6 @@ interface FieldProps {
  
 export default function Field({ value, readable=FieldType.EDITABLE, style=FieldStyle.DEFAULT, onChange }: FieldProps) {
     return (
-        <input onChange={onChange} readOnly={readable === FieldType.READONLY ? true : false} value={value || ''} className={`appearance-none rounded py-2 px-3 focus:outline-none text-white ${style === FieldStyle.DEFAULT ? 'bg-[#474747] focus:ring-neutral-400 focus:ring-1' : 'bg-transparent'}`} type="text" />
+        <input onChange={onChange} readOnly={readable === FieldType.READONLY ? true : false} value={value || ''} className={`appearance-none rounded py-2 px-3 w-[220px] focus:outline-none text-white ${style === FieldStyle.DEFAULT ? 'bg-[#474747] focus:ring-neutral-400 focus:ring-1' : 'bg-transparent'}`} type="text" />
     );
 }

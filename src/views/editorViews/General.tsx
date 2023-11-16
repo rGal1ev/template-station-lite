@@ -1,13 +1,26 @@
-import { ChangeEvent } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { useProgramStore } from "../../store/program"
 import { useEditorStore } from "../../store/editor"
 import { useNavigate } from "react-router-dom"
-import Field, { FieldType } from "../../components/UI/Field"
+import Field, { FieldType } from "../../components/UI/form/Field"
 import DeveloperCard from "../../components/Editor/DeveloperCard/DeveloperCard"
 import { v4 as uuid } from "uuid"
-import Select from 'react-select'
+import OutletLayout from "../../components/UI/OutletLayout"
+import Row from "../../components/UI/Row"
+import Label from "../../components/UI/form/Label"
+import Column from "../../components/UI/columns/Column"
+import DataSelect from "../../components/UI/form/DataSelect"
+import ListColumn from "../../components/UI/columns/ListColumn"
+import RoundedButton from "../../components/UI/buttons/RoundedButton"
+import If from "../../components/UI/If"
+import axios from "axios"
+import toast from 'react-hot-toast'
+import { getURLBase } from "../../helpers/getURLBase"
 
 export default function General() {
+    const [specialties, setSpecialties] = useState<any[]>([])
+    const [disciplines, setDisciplines] = useState<any[]>([])
+
     const { developmentYear, academicSpecialty, academicDiscipline } = useProgramStore((state) => ({
         developmentYear: state.program?.developmentYear,
         academicSpecialty: state.program?.academicSpecialty, 
@@ -29,7 +42,7 @@ export default function General() {
     }))
 
     const programDocumentName = () => {
-        return `РП_${editingProgram?.academicDiscipline}_${editingProgram?.developmentYear}`
+        return `РП_${editingProgram?.academicSpecialty?.code || ''}_${editingProgram?.developmentYear || ''}`
     }
 
     const navigate = useNavigate()
@@ -39,7 +52,18 @@ export default function General() {
     }
 
     function onAcademicSpecialtyChange(option: any) {
-        setAcademicSpecialty(option.value)
+        setAcademicSpecialty({
+            id: option.value.id,
+            code: option.value.code,
+            value: option.value.value
+        })
+
+        const fetchDisciplinesPromise = fetchDisciplinesById(option.value.id)
+        toast.promise(fetchDisciplinesPromise, {
+                loading: 'Загружаю дисциплины',
+                success: 'Дисциплины загружены',
+                error: 'Произошла ошибка',
+              })
     }
 
     function onAcademicDisciplineChange(option: any) {
@@ -68,124 +92,112 @@ export default function General() {
         navigate('../developer')
     }
 
-    const specialties = [
-        {value: "Программирование информационных система", label: "Программирование информационных система"},
-        {value: "Сетевое и системное администрирование", label: "Сетевое и системное администрирование"},
-    ]
+    async function fetchSpecialties() {
+        const res = await axios.get<any[]>(`${getURLBase()}/specialties`)
 
-    const disciplines = [
-        {value: "01.02.03", label: "01.02.03"},
-        {value: "01.02.04", label: "01.02.04"}
-    ]
+        if (res.status === 200) {
+            const preparedData = res.data.map(item => ({
+                label: `${item.code} ${item.value}`,
+                value: {
+                    id: item.id,
+                    code: item.code,
+                    value: item.value
+                }
+            }))
+
+            setSpecialties([...preparedData])
+            return true
+        }
+
+        return false
+    }
+
+    async function fetchDisciplinesById(id: number) {
+        const res = await axios.get<any[]>(`${getURLBase()}/speciality_disciplines/${id}`)
+
+        if (res.status === 200) {
+            const preparedData = res.data.map(item => ({
+                label: item.value,
+                value: item.value
+            }))
+
+            setDisciplines([...preparedData])
+            return true
+        }
+
+        return false
+    }
+
+    useEffect(() => {
+        const fetchSpecialtiesPromise = fetchSpecialties()
+
+        toast.promise(fetchSpecialtiesPromise, {
+            loading: 'Загружаю специальности',
+            success: 'Специальности загружены',
+            error: 'Произошла ошибка',
+          })
+
+        if (academicSpecialty) {
+            const fetchDisciplinesPromise = fetchDisciplinesById(academicSpecialty.id)
+            toast.promise(fetchDisciplinesPromise, {
+                loading: 'Загружаю дисциплины',
+                success: 'Дисциплины загружены',
+                error: 'Произошла ошибка',
+            })
+        }
+
+    }, [])
 
     return (
-        <div className="flex-1 gap-4 p-4">   
-                <div className="flex gap-4">
-                    <div className="mb-4">
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
-                            Название документа
-                        </label>
-                        <Field value={programDocumentName()} readable={FieldType.READONLY} />
-                    </div>
+        <OutletLayout>
+            <Row>
+                <Column>
+                    <Label title="Название документа"/>
+                    <Field value={programDocumentName()} readable={FieldType.READONLY}/>
+                </Column>
 
-                    <div className="mb-4">
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
-                            Год
-                        </label>
+                <Column>
+                    <Label title="Год" />
+                    <Field onChange={handleFieldsChange} value={developmentYear || ''}/>
+                </Column>
+            </Row>
 
-                        <Field onChange={handleFieldsChange} value={developmentYear || ''}/>
-                    </div>
-                </div>
+            <Row>
+                <Column>
+                    <Label title="Специальность"/>
+                    <DataSelect options={specialties} 
+                                value={academicSpecialty} 
+                                label={academicSpecialty?.value} 
+                                onChange={onAcademicSpecialtyChange}/>
+                </Column>
+                <Column>
+                    <Label title="Дисциплина"/>
+                    <DataSelect options={disciplines} 
+                                value={academicDiscipline} 
+                                label={academicDiscipline} 
+                                onChange={onAcademicDisciplineChange}/>
+                </Column>
+            </Row>
 
-                <div className="flex gap-4">
-                    <div className="mb-4">
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
-                            Специальность
-                        </label>
-                        <div className=' w-[220px]'>
-                            <Select styles={{
-                                        option: (baseStyles) => ({
-                                            ...baseStyles,
-                                            color: 'white'
-                                        }),
-                                    }}
-                                    placeholder="Выберите специальность"
-                                    options={specialties}
-                                    defaultValue={{
-                                        value: academicSpecialty,
-                                        label: academicSpecialty
-                                    }}
-                                    onChange={onAcademicSpecialtyChange}
-                                    noOptionsMessage={() => 'Список пуст'} 
-                                    theme={(theme) => ({
-                                        ...theme,
-                                        colors: {
-                                            ...theme.colors,
-                                            primary: '#525252',
-                                            neutral0: '#404040',
-                                            neutral80: 'white',
-                                            primary25: '#525252',
-                                            primary50: '#A3A3A3',
-                                        },
-                                    })}/>
-                        </div>
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
-                            Дисциплина
-                        </label>
-                        <div className=' w-[220px]'>
-                            <Select styles={{
-                                        option: (baseStyles) => ({
-                                            ...baseStyles,
-                                            color: 'white'
-                                        }),
-                                    }} 
-                                    placeholder="Выберите дисциплину"
-                                    options={disciplines}
-                                    defaultValue={{
-                                        value: academicDiscipline,
-                                        label: academicDiscipline
-                                    }}
-                                    onChange={onAcademicDisciplineChange}
-                                    noOptionsMessage={() => 'Список пуст'} 
-                                    theme={(theme) => ({
-                                        ...theme,
-                                        colors: {
-                                        ...theme.colors,
-                                        primary: '#525252',
-                                        neutral0: '#404040',
-                                        neutral80: 'white',
-                                        primary25: '#525252',
-                                        primary50: '#A3A3A3'
-                                        },
-                                    })}/>
-                        </div>
-                    </div>
-                </div>
+            <Column>
+                <Column>
+                    <Label title="Разработчики"/>
+                    <ListColumn>
+                        {editingProgram?.developers.map(developer => (
+                            <DeveloperCard key={developer.id}
+                                            name={developer.name} 
+                                            post={developer.post}
+                                            onClick={() => handleDeveloperClick(developer.id)}
+                                            onDeleteClick={() => handleDeveloperDelete(developer.id)}/>
+                        ))}
+ 
+                        <If condition={editingProgram?.developers.length === 0}
+                            content={<div className="bg-[#3A3A3A] w-fit text-secondary-text py-1 px-3 rounded font-medium">Список разработчиков пуст</div>} />
 
-                <div>
-                    <label className="block text-[#C9C9C9] text-sm font-semibold mb-2">
-                        Разработчики
-                    </label>
-                        <ul className="flex flex-col gap-2">
-                            {editingProgram?.developers.map(developer => (
-                                <DeveloperCard key={developer.id}
-                                               name={developer.name} 
-                                               post={developer.post}
-                                               onClick={() => handleDeveloperClick(developer.id)}
-                                               onDeleteClick={() => handleDeveloperDelete(developer.id)}/>
-                            ))}
-
-                            {(editingProgram?.developers.length === 0) && 
-                                <div className="bg-[#3A3A3A] w-fit text-secondary-text py-1 px-3 rounded font-medium">Список разработчиков пуст</div>
-                            }
-
-                            <button onClick={handleNewDeveloper} className="text-sm px-6 py-2 rounded w-fit font-medium bg-[#3A3A3A] text-white">
-                                Добавить разработчика
-                            </button>
-                        </ul>
-                </div>
-            </div>
+                        <RoundedButton title="Добавить разработчика" onClick={handleNewDeveloper}/> 
+                    </ListColumn>
+                </Column>
+            </Column>
+        </OutletLayout>
     );
 }

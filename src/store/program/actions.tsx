@@ -1,9 +1,10 @@
-import { Competence, Developer } from "../../types/program/index"
+import { Speciality } from "../../types/program/speciality"
+import { Competence, Developer, Section } from "../../types/program/index"
 import { ProgramState } from "./state"
 
 export interface ProgramStateGeneralActions {
     setDevelopmentYear: (newValue: string) => void
-    setAcademicSpecialty: (newValue: string) => void
+    setAcademicSpecialty: (newValue: Speciality) => void
     setAcademicDiscipline: (newValue: string) => void
 }
 
@@ -22,6 +23,88 @@ export interface ProgramStateCompetenciesActions {
     removeCompetence: (by: string) => void
     competenceBy: (by: string) => void
 }
+
+export interface ProgramStateSectionActions {
+    addSection: (section: Section) => void
+    updateSection: (section: Section) => void
+
+    removeSection: (by: string) => void
+    sectionBy: (by: string) => Section | undefined
+}
+
+export interface ProgramStateDisciplineVolumeActions {
+    updateTheoreticalVolume: (newValue: number) => void
+    updateLaboratoryVolume: (newValue: number) => void
+    updatePracticalVolume: (newValue: number) => void
+    updateIndependentVolume: (newValue: number) => void
+    updateCertificationVolume: (newValue: number) => void
+}
+
+export const createSectionProgramActions = (set: any, get: any): ProgramStateSectionActions => ({
+    addSection: (section) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        sections: state.program ? [...state.program.sections, section] : [section]
+    }})),
+
+    updateSection: (by) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        sections: state.program?.sections.map(section => {
+            if (section.id === by.id) {
+                return by
+            }
+
+            return section
+        })
+    }})),
+
+    sectionBy: (by) => get().program.sections.find((section: Section) => section.id === by),
+    removeSection: (by) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        sections: state.program?.sections.filter(section => section.id != by)
+    }}))
+})
+
+export const createDisciplineVolumeProgramActions = (set: any): ProgramStateDisciplineVolumeActions => ({
+    updateTheoreticalVolume: (newValue) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        disciplineVolume: {
+            ...state.program?.disciplineVolume,
+            theoretical: newValue
+        }
+    }})),
+
+    updateLaboratoryVolume: (newValue) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        disciplineVolume: {
+            ...state.program?.disciplineVolume,
+            laboratory: newValue
+        }
+    }})),
+
+    updatePracticalVolume: (newValue) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        disciplineVolume: {
+            ...state.program?.disciplineVolume,
+            practical: newValue
+        }
+    }})),
+
+    updateIndependentVolume: (newValue) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        disciplineVolume: {
+            ...state.program?.disciplineVolume,
+            independent: newValue
+        }
+    }})),
+
+    updateCertificationVolume: (newValue) => set((state: ProgramState) => ({program: {
+        ...state.program,
+        disciplineVolume: {
+            ...state.program?.disciplineVolume,
+            certification: newValue
+        }
+    }})),
+})
 
 export const createGeneralProgramActions = (set: any): ProgramStateGeneralActions  => ({
     setDevelopmentYear: (newValue) => set((state: ProgramState) => ({program: {

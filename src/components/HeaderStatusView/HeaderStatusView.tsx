@@ -7,7 +7,8 @@ import { updateImportedProgramsId } from "./helpers"
 import { useLocalStorage } from 'usehooks-ts'
 import { File, ChevronRight } from 'react-feather'
 import { useProgramStore } from "../../store/program"
-import Field, { FieldStyle } from "../UI/Field"
+import Field, { FieldStyle } from "../UI/form/Field"
+import toast from 'react-hot-toast'
  
 interface HeaderStatusViewProps {
     isProgramEditing: boolean;
@@ -39,6 +40,7 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
         setStorageProgramList((prev) => (
             [...prev, ...importedProgramsWithNewID]
         ))
+        toast.success(`Импортировано ${importedProgramsWithNewID.length} прогамм(ы)`)
     }
 
     function handleProgramTitleChange(e: ChangeEvent<HTMLInputElement>) {

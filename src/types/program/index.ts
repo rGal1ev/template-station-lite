@@ -3,12 +3,13 @@ import { Competence } from "./competence";
 import { Developer } from "./developer";
 import { EducationalUnit, Theme } from "./theme";
 import { Section } from "./section";
+import { Speciality } from "./speciality";
 
 export interface Program {
     id: string
     title: string
     developmentYear: string
-    academicSpecialty: string
+    academicSpecialty: Speciality | undefined
     academicDiscipline: string
     createdAt: string
     isPinned: boolean
@@ -24,9 +25,7 @@ export interface Program {
         certification: number
     }
 
-    thematicPlan: {
-        sections: Section[]
-    }
+    sections: Section[]
 }
 
 export { type CompetenceType, 

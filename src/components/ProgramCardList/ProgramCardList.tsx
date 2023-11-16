@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { useProgramStore } from "../../store/program"
 import { useEditorStore } from "../../store/editor"
 import { Paperclip } from 'react-feather'
+import toast from 'react-hot-toast'
 
 export default function ProgramCardList() {
     const [isSideBarOpened, setSideBarOpened] = useState<boolean>(false)
@@ -59,6 +60,7 @@ export default function ProgramCardList() {
 
     function handleProgramDelete(id: string) {
         setStorageProgramList(deleteProgramFromList(id, storageProgramList))
+        toast.success("Программа удалена")
     }
 
     function handleProgramOpening(id: string) {
@@ -91,12 +93,13 @@ export default function ProgramCardList() {
         const updatedStorageList = updateProgramInList(editingProgram, storageProgramList)
         setStorageProgramList([...updatedStorageList])
 
+        toast.success("Программа сохранена")
         clearEditingProgram()
         clearEditingState()
     }, [])
 
     return (
-        <div className=" p-4">
+        <div className="p-4">
             {!(pinnedPrograms.length === 0) &&
                 <>
                     <div className="flex gap-1 items-center mb-2 select-none">

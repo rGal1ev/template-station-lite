@@ -12,8 +12,9 @@ export function generateEmptyProgram(): Program {
         id: uuid(),
         title: `Новый документ с длинным названием`,
         developmentYear: '',
-        academicSpecialty: '',
+        academicSpecialty: undefined,
         academicDiscipline: '',
+
         createdAt: `${year}.${month}.${day}`,
         isPinned: false,
 
@@ -28,8 +29,6 @@ export function generateEmptyProgram(): Program {
             certification: 0,
         },
     
-        thematicPlan: {
-            sections: []
-        }
+        sections: []
     }
 }

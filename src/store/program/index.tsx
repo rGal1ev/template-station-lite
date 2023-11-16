@@ -2,13 +2,24 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 import { ProgramState } from "./state"
-import { ProgramStateCompetenciesActions, ProgramStateDeveloperActions, ProgramStateGeneralActions } from "./actions"
-import { createDevelopersProgramActions, createGeneralProgramActions, createCompetenciesProgramActions } from "./actions"
+import { ProgramStateCompetenciesActions, 
+         ProgramStateDeveloperActions, 
+         ProgramStateGeneralActions,
+         ProgramStateDisciplineVolumeActions,
+         ProgramStateSectionActions } from "./actions"
+
+import { createDevelopersProgramActions, 
+         createGeneralProgramActions, 
+         createCompetenciesProgramActions, 
+         createDisciplineVolumeProgramActions,
+         createSectionProgramActions } from "./actions"
 
 const useProgramStore = create<ProgramState & 
                                ProgramStateGeneralActions & 
                                ProgramStateDeveloperActions &
-                               ProgramStateCompetenciesActions>()(
+                               ProgramStateCompetenciesActions &
+                               ProgramStateDisciplineVolumeActions &
+                               ProgramStateSectionActions>()(
     persist(
         (set, get) => ({
             program: undefined,
@@ -46,7 +57,9 @@ const useProgramStore = create<ProgramState &
             clear: () => set(() => ({program: undefined})),
             ...createGeneralProgramActions(set),
             ...createDevelopersProgramActions(set, get),
-            ...createCompetenciesProgramActions(set, get)
+            ...createCompetenciesProgramActions(set, get),
+            ...createDisciplineVolumeProgramActions(set),
+            ...createSectionProgramActions(set, get)
         }),
 
         {

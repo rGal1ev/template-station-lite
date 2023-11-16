@@ -1,56 +1,138 @@
-import Field, { FieldType } from "../../components/UI/Field";
+import Field from "../../components/UI/form/Field"
+import OutletLayout from "../../components/UI/OutletLayout"
+import Row from "../../components/UI/Row"
+import Label from "../../components/UI/form/Label"
+import Column from "../../components/UI/columns/Column"
+import RoundedButton from "../../components/UI/buttons/RoundedButton"
+import { useProgramStore } from "../../store/program"
+import { useNavigate } from "react-router-dom"
+import { v4 as uuid } from "uuid"
+import { useEditorStore } from "../../store/editor"
+import SectionCard from "../../components/Editor/SectionCard/SectionCard"
 
 export default function Plan() {
+    const { theoreticalVolume, 
+            practicalVolume, 
+            independentVolume, 
+            laboratoryVolume, 
+            certificationVolume,
+            sections } = useProgramStore((state) => ({
+        theoreticalVolume: state.program?.disciplineVolume.theoretical,
+        practicalVolume: state.program?.disciplineVolume.practical,
+        independentVolume: state.program?.disciplineVolume.independent,
+        laboratoryVolume: state.program?.disciplineVolume.laboratory,
+        certificationVolume: state.program?.disciplineVolume.certification,
+        sections: state.program?.sections
+    }))
+
+    const { addSection, removeSection } = useProgramStore((state) => ({
+        addSection: state.addSection,
+        removeSection: state.removeSection
+    }))
+
+    const updateSectionId = useEditorStore((state) => state.updateSectionId)
+    
+    const { updateTheoreticalVolume, 
+            updatePracticalVolume, 
+            updateIndependentVolume, 
+            updateLaboratoryVolume, 
+            updateCertificationVolume } = useProgramStore((state) => ({
+        updateTheoreticalVolume: state.updateTheoreticalVolume,
+        updatePracticalVolume: state.updatePracticalVolume,
+        updateIndependentVolume: state.updateIndependentVolume,
+        updateLaboratoryVolume: state.updateLaboratoryVolume,
+        updateCertificationVolume: state.updateCertificationVolume
+    }))
+
+    const navigate = useNavigate()
+
+    function handleNewSectionClick() {
+        const newSectionId = uuid()
+
+        addSection({
+            id: newSectionId,
+            title: "Новый раздел",
+
+            competencies: [],
+            themes: []
+        })
+
+        updateSectionId(newSectionId)
+        navigate("../section")
+    }
+
+    function handleSectionClick(id: string) {
+        updateSectionId(id)
+        navigate("../section")
+    }
+
+    function handleSectionDelete(id: string) {
+        removeSection(id)
+    }
+
+    const totalVolumesSum = (): number => {
+        if (theoreticalVolume === undefined || 
+            practicalVolume === undefined || 
+            independentVolume === undefined ||
+            laboratoryVolume === undefined ||
+            certificationVolume === undefined) return 0
+
+        return theoreticalVolume + 
+               practicalVolume + 
+               independentVolume + 
+               laboratoryVolume +
+               certificationVolume
+
+    }
     return (
-        <div className="flex-1 gap-4 p-4">
-            <div className="mb-4">
-                <p className="font-semibold mb-2">Объем учебной дисциплины<span className="text-secondary-text ml-2">Всего: -</span></p>
-                <div className="flex gap-x-2 gap-y-2 flex-wrap">
-                    <div>
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-1">
-                            Теория
-                        </label>
-                        <Field value="" readable={FieldType.READONLY} />
-                    </div>
+        <OutletLayout>
+            <Row>
+                <Label title="Объем учебной дисциплины"/>
+                <span className="text-secondary-text ml-2">Всего: {!isNaN(totalVolumesSum()) ? totalVolumesSum() : '-'}</span>
+            </Row>
+            <Row>
+                <Column>
+                    <Label title="Теория"/>
+                    <Field value={theoreticalVolume} 
+                           onChange={(e) => updateTheoreticalVolume(parseInt(e.target.value))}/>
+                </Column>
 
-                    <div>
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-1">
-                            Лабораторные
-                        </label>
-                        <Field value="" readable={FieldType.READONLY} />
-                    </div>
+                <Column>
+                    <Label title="Лабораторные"/>
+                    <Field value={laboratoryVolume} 
+                           onChange={(e) => updateLaboratoryVolume(parseInt(e.target.value))}/>
+                </Column>
 
-                    <div>
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-1">
-                            Практические
-                        </label>
-                        <Field value="" readable={FieldType.READONLY} />
-                    </div>
+                <Column>
+                    <Label title="Практические"/>
+                    <Field value={practicalVolume} 
+                           onChange={(e) => updatePracticalVolume(parseInt(e.target.value))}/>
+                </Column>
 
-                    <div>
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-1">
-                            Самостоятельные
-                        </label>
-                        <Field value="" readable={FieldType.READONLY} />
-                    </div>
+                <Column>
+                    <Label title="Самостоятельные"/>
+                    <Field value={independentVolume} 
+                           onChange={(e) => updateIndependentVolume(parseInt(e.target.value))}/>
+                </Column>
 
-                    <div>
-                        <label className="block text-[#C9C9C9] text-sm font-semibold mb-1">
-                            Промеж-ая аттестация
-                        </label>
-                        <Field value="" readable={FieldType.READONLY} />
-                    </div>
-                </div>
-            </div>
+                <Column>
+                    <Label title="Промеж-ая аттестация"/>
+                    <Field value={certificationVolume} 
+                           onChange={(e) => updateCertificationVolume(parseInt(e.target.value))}/>
+                </Column>
+            </Row>
 
-            <div>
-                <p className="font-semibold mb-2">Тематический план</p>
+            <Column>
+                <Label title="Тематический план"/>
 
+                {sections?.map(section => (
+                    <SectionCard title={section.title}
+                                 onClick={() => handleSectionClick(section.id)}
+                                 onDeleteClick={() => handleSectionDelete(section.id)} />
+                ))}
 
-                <button  className="text-sm px-6 py-2 rounded w-fit font-medium bg-[#3A3A3A] text-white">
-                    Добавить раздел
-                </button>
-            </div>
-        </div>
+                <RoundedButton onClick={handleNewSectionClick} title="Добавить раздел"/>
+            </Column>
+        </OutletLayout>
     );
 }

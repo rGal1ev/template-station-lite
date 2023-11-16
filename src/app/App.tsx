@@ -10,6 +10,8 @@ import { useUserPreferences } from '../store/preferences';
 import DeveloperEditor from '../views/editorViews/DeveloperEditor';
 import Specifications from '../views/editorViews/Specifications';
 import Plan from '../views/editorViews/Plan';
+import { Toaster } from 'react-hot-toast';
+import SectionEditor from '../views/editorViews/SectionEditor';
 
 export default function App() {
     const { getMeetingHandled } = useUserPreferences()
@@ -21,6 +23,14 @@ export default function App() {
 
     return (
         <div className='relative text-sm h-full bg-[#272727] text-white overflow-hidden'>
+            <Toaster toastOptions={{
+                        style: {
+                        background: '#333',
+                        color: '#fff',
+                        }
+                     }}
+            />
+            
             {getMeetingHandled() ? 
                 <>
                     <AppHeader />
@@ -33,7 +43,9 @@ export default function App() {
                             <Route path='specifications' element={<Specifications />} />
                             <Route path='plan' element={<Plan />} />
                             <Route path='other' element={<h1>Прочее</h1>} />
+
                             <Route path='developer' element={<DeveloperEditor />} />
+                            <Route path='section' element={<SectionEditor />} />
                         </Route>
 
                         <Route path='/export' element={<ProgramExport />} />
