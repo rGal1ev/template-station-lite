@@ -18,10 +18,9 @@ export interface ProgramStateDeveloperActions {
 
 export interface ProgramStateCompetenciesActions {
     addCompetence: (competence: Competence) => void
-    updateCompetence: (competence: Competence) => void
 
-    removeCompetence: (by: string) => void
-    competenceBy: (by: string) => void
+    removeCompetence: (by: number) => void
+    competenceBy: (by: number) => void
 }
 
 export interface ProgramStateSectionActions {
@@ -153,20 +152,9 @@ export const createCompetenciesProgramActions = (set: any, get: any): ProgramSta
         competencies: state.program ? [...state.program.competencies, newValue] : [newValue]
     }})),
 
-    updateCompetence: (by) => set((state: ProgramState) => ({program: {
+    competenceBy: (by) => get().program.competencies.find((competence: Competence) => competence.id === by),
+    removeCompetence: (by) => set((state: ProgramState) => ({program: {
         ...state.program,
-        developers: state.program?.competencies.map(competence => {
-            if (competence.id === by.id) {
-                return by
-            }
-
-            return competence
-        })
-    }})),
-
-    removeCompetence: (by) => get().program.competencies.find((competence: Competence) => competence.id === by),
-    competenceBy: (by) => set((state: ProgramState) => ({program: {
-        ...state.program,
-        developers: state.program?.competencies.filter(competence => competence.id != by)
+        competencies: state.program?.competencies.filter(competence => competence.id != by)
     }}))
 })

@@ -10,6 +10,7 @@ import { useProgramStore } from "../../store/program"
 import { useEditorStore } from "../../store/editor"
 import { Paperclip } from 'react-feather'
 import toast from 'react-hot-toast'
+import { useApiStore } from "../../store/api"
 
 export default function ProgramCardList() {
     const [isSideBarOpened, setSideBarOpened] = useState<boolean>(false)
@@ -20,6 +21,7 @@ export default function ProgramCardList() {
 
     const clearEditingProgram = useProgramStore((state) => state.clear)
     const clearEditingState = useEditorStore((state) => state.clear)
+    const clearAPIData = useApiStore((state) => state.clear)
     const setEditingProgram = useEditorStore((state) => state.updateId)
 
     const [storageProgramList, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
@@ -94,8 +96,10 @@ export default function ProgramCardList() {
         setStorageProgramList([...updatedStorageList])
 
         toast.success("Программа сохранена")
+
         clearEditingProgram()
         clearEditingState()
+        clearAPIData()
     }, [])
 
     return (

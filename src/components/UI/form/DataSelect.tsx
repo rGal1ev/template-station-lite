@@ -2,16 +2,16 @@ import Select from 'react-select'
 
 interface DataSelectProps {
     options: any[]
-    value: any
-    label: string | undefined
+    value?: any
+    label?: string | undefined
     
     onChange: (option: any) => void
 }
 
 function DataSelect({
     options,
-    value,
-    label,
+    value = undefined,
+    label = undefined,
     onChange
 }: DataSelectProps) {
     return (
@@ -22,11 +22,10 @@ function DataSelect({
                             color: 'white'
                         }),
                     }}
-                    placeholder="Выберите специальность"
                     options={options}
                     defaultValue={{
                         value: value,
-                        label: label === undefined ? '' : label
+                        label: value === undefined ? '' : label
                     }}
                     onChange={onChange}
                     noOptionsMessage={() => 'Список пуст'} 

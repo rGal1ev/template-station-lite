@@ -13,13 +13,21 @@ import DataSelect from "../../components/UI/form/DataSelect"
 import ListColumn from "../../components/UI/columns/ListColumn"
 import RoundedButton from "../../components/UI/buttons/RoundedButton"
 import If from "../../components/UI/If"
-import axios from "axios"
 import toast from 'react-hot-toast'
-import { getURLBase } from "../../helpers/getURLBase"
+import { useApiStore } from "../../store/api"
 
 export default function General() {
-    const [specialties, setSpecialties] = useState<any[]>([])
-    const [disciplines, setDisciplines] = useState<any[]>([])
+    // const [specialties, setSpecialties] = useState<any[]>([])
+    // const [disciplines, setDisciplines] = useState<any[]>([])
+
+    const specialties = useApiStore((state) => state.specialties)
+    const disciplines = useApiStore((state) => state.disciplines)
+
+    const fetchSpecialties = useApiStore((state) => state.fetchSpecialties)
+    const fetchDisciplines = useApiStore((state) => state.fetchDisciplines)
+
+    const [selectableSpecialties, setSelectableSpecialties] = useState<any[]>([])
+    const [selectableDisciplines, setSelectableDisciplines] = useState<any[]>([])
 
     const { developmentYear, academicSpecialty, academicDiscipline } = useProgramStore((state) => ({
         developmentYear: state.program?.developmentYear,
@@ -58,7 +66,7 @@ export default function General() {
             value: option.value.value
         })
 
-        const fetchDisciplinesPromise = fetchDisciplinesById(option.value.id)
+        const fetchDisciplinesPromise = fetchDisciplines(option.value.id)
         toast.promise(fetchDisciplinesPromise, {
                 loading: 'Загружаю дисциплины',
                 success: 'Дисциплины загружены',
@@ -92,61 +100,99 @@ export default function General() {
         navigate('../developer')
     }
 
-    async function fetchSpecialties() {
-        const res = await axios.get<any[]>(`${getURLBase()}/specialties`)
+    // async function fetchSpecialties() {
+    //     const res = await axios.get<any[]>('http://localhost:5000/api/specialties')
 
-        if (res.status === 200) {
-            const preparedData = res.data.map(item => ({
-                label: `${item.code} ${item.value}`,
-                value: {
-                    id: item.id,
-                    code: item.code,
-                    value: item.value
-                }
-            }))
+    //     if (res.status === 200) {
+    //         const preparedData = res.data.map(item => ({
+    //             label: `${item.code} ${item.value}`,
+    //             value: {
+    //                 id: item.id,
+    //                 code: item.code,
+    //                 value: item.value
+    //             }
+    //         }))
 
-            setSpecialties([...preparedData])
-            return true
-        }
+    //         setSpecialties([...preparedData])
+    //         return true
+    //     }
 
-        return false
-    }
+    //     return false
+    // }
 
-    async function fetchDisciplinesById(id: number) {
-        const res = await axios.get<any[]>(`${getURLBase()}/speciality_disciplines/${id}`)
+    // async function fetchDisciplinesById(id: number) {
+    //     const res = await axios.get<any[]>(`http://localhost:5000/api/speciality_disciplines/${id}`)
 
-        if (res.status === 200) {
-            const preparedData = res.data.map(item => ({
-                label: item.value,
-                value: item.value
-            }))
+    //     if (res.status === 200) {
+    //         const preparedData = res.data.map(item => ({
+    //             label: item.value,
+    //             value: item.value
+    //         }))
 
-            setDisciplines([...preparedData])
-            return true
-        }
+    //         setDisciplines([...preparedData])
+    //         return true
+    //     }
 
-        return false
-    }
+    //     return false
+    // }
 
     useEffect(() => {
-        const fetchSpecialtiesPromise = fetchSpecialties()
+        if (specialties.length === 0) {
+            const fetchSpecialtiesPromise = fetchSpecialties()
+            toast.promise(fetchSpecialtiesPromise, {
+                loading: 'Загружаю специальности',
+                success: 'Специальности загружены',
+                error: 'Произошла ошибка',
+            })
+        }
 
-        toast.promise(fetchSpecialtiesPromise, {
-            loading: 'Загружаю специальности',
-            success: 'Специальности загружены',
-            error: 'Произошла ошибка',
-          })
-
-        if (academicSpecialty) {
-            const fetchDisciplinesPromise = fetchDisciplinesById(academicSpecialty.id)
+        if (disciplines.length === 0) {
+            if (academicSpecialty === undefined) return
+            const fetchDisciplinesPromise = fetchDisciplines(academicSpecialty.id)
             toast.promise(fetchDisciplinesPromise, {
                 loading: 'Загружаю дисциплины',
                 success: 'Дисциплины загружены',
                 error: 'Произошла ошибка',
             })
         }
+        // const fetchSpecialtiesPromise = fetchSpecialties()
+
+        // toast.promise(fetchSpecialtiesPromise, {
+        //     loading: 'Загружаю специальности',
+        //     success: 'Специальности загружены',
+        //     error: 'Произошла ошибка',
+        //   })
+
+        // if (academicSpecialty) {
+        //     const fetchDisciplinesPromise = fetchDisciplinesById(academicSpecialty.id)
+        //     toast.promise(fetchDisciplinesPromise, {
+        //         loading: 'Загружаю дисциплины',
+        //         success: 'Дисциплины загружены',
+        //         error: 'Произошла ошибка',
+        //     })
+        // }
 
     }, [])
+
+    useEffect(() => {
+        setSelectableSpecialties([...specialties.map(speciality => ({
+            label: `${speciality.code} ${speciality.value}`,
+            value: {
+                id: speciality.id,
+                code: speciality.code,
+                value: speciality.value
+            }
+        }))])
+
+    }, [specialties])
+
+    useEffect(() => {
+        setSelectableDisciplines([...disciplines.map(discipline => ({
+            label: discipline.value,
+            value: discipline.value
+        }))])
+
+    }, [disciplines])
 
     return (
         <OutletLayout>
@@ -165,14 +211,14 @@ export default function General() {
             <Row>
                 <Column>
                     <Label title="Специальность"/>
-                    <DataSelect options={specialties} 
-                                value={academicSpecialty} 
-                                label={academicSpecialty?.value} 
+                    <DataSelect options={selectableSpecialties}
+                                value={academicSpecialty}
+                                label={`${academicSpecialty?.code} ${academicSpecialty?.value}`} 
                                 onChange={onAcademicSpecialtyChange}/>
                 </Column>
                 <Column>
                     <Label title="Дисциплина"/>
-                    <DataSelect options={disciplines} 
+                    <DataSelect options={selectableDisciplines} 
                                 value={academicDiscipline} 
                                 label={academicDiscipline} 
                                 onChange={onAcademicDisciplineChange}/>
@@ -190,7 +236,7 @@ export default function General() {
                                             onClick={() => handleDeveloperClick(developer.id)}
                                             onDeleteClick={() => handleDeveloperDelete(developer.id)}/>
                         ))}
- 
+
                         <If condition={editingProgram?.developers.length === 0}
                             content={<div className="bg-[#3A3A3A] w-fit text-secondary-text py-1 px-3 rounded font-medium">Список разработчиков пуст</div>} />
 

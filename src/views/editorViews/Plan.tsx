@@ -51,7 +51,7 @@ export default function Plan() {
 
         addSection({
             id: newSectionId,
-            title: "Новый раздел",
+            title: '',
 
             competencies: [],
             themes: []
@@ -125,8 +125,10 @@ export default function Plan() {
             <Column>
                 <Label title="Тематический план"/>
 
-                {sections?.map(section => (
-                    <SectionCard title={section.title}
+                {sections?.map((section, index) => (
+                    <SectionCard key={index}
+                                 index={index}
+                                 title={section.title}
                                  onClick={() => handleSectionClick(section.id)}
                                  onDeleteClick={() => handleSectionDelete(section.id)} />
                 ))}
