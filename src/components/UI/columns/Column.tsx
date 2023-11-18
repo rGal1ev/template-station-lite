@@ -6,11 +6,11 @@ interface ColumnProps {
 }
 
 function Column({
-    style,
+    style=undefined,
     children
 }: ColumnProps) {
     return (
-        <div className={`flex flex-col gap-2 ${style && style}`}>
+        <div className={`flex flex-col gap-2 ${style === undefined ? '' : style}`}>
             { children }
         </div>
     );

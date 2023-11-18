@@ -46,6 +46,7 @@ export default function App() {
 
                             <Route path='developer' element={<DeveloperEditor />} />
                             <Route path='section' element={<SectionEditor />} />
+                            <Route path='theme' element={<div>Hello</div>} />
                         </Route>
 
                         <Route path='/export' element={<ProgramExport />} />

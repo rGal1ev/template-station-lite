@@ -138,7 +138,6 @@ export default function Specifications() {
                     
                 ))}
 
-                <Label title="Выберите доступные компетенции"/>
                 <DataSelect options={selectableFetchedCompetencies}
                             onChange={onFetchedCompetenciesChange}/>
             </Column>

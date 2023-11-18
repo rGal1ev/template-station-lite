@@ -4,9 +4,12 @@ export interface EducationalUnit {
 }
 
 export interface Theme {
-    theoretical: EducationalUnit[]
-    laboratory: EducationalUnit[]
-    practical: EducationalUnit[]
-    independent: EducationalUnit[]
-    certification: EducationalUnit[]
+    id: string
+    title: string
+    
+    theoreticals: EducationalUnit[]
+    laboratorys: EducationalUnit[]
+    practicals: EducationalUnit[]
+    independents: EducationalUnit[]
+    certifications: EducationalUnit[]
 }

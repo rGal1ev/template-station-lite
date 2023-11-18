@@ -100,42 +100,6 @@ export default function General() {
         navigate('../developer')
     }
 
-    // async function fetchSpecialties() {
-    //     const res = await axios.get<any[]>('http://localhost:5000/api/specialties')
-
-    //     if (res.status === 200) {
-    //         const preparedData = res.data.map(item => ({
-    //             label: `${item.code} ${item.value}`,
-    //             value: {
-    //                 id: item.id,
-    //                 code: item.code,
-    //                 value: item.value
-    //             }
-    //         }))
-
-    //         setSpecialties([...preparedData])
-    //         return true
-    //     }
-
-    //     return false
-    // }
-
-    // async function fetchDisciplinesById(id: number) {
-    //     const res = await axios.get<any[]>(`http://localhost:5000/api/speciality_disciplines/${id}`)
-
-    //     if (res.status === 200) {
-    //         const preparedData = res.data.map(item => ({
-    //             label: item.value,
-    //             value: item.value
-    //         }))
-
-    //         setDisciplines([...preparedData])
-    //         return true
-    //     }
-
-    //     return false
-    // }
-
     useEffect(() => {
         if (specialties.length === 0) {
             const fetchSpecialtiesPromise = fetchSpecialties()
@@ -155,23 +119,6 @@ export default function General() {
                 error: 'Произошла ошибка',
             })
         }
-        // const fetchSpecialtiesPromise = fetchSpecialties()
-
-        // toast.promise(fetchSpecialtiesPromise, {
-        //     loading: 'Загружаю специальности',
-        //     success: 'Специальности загружены',
-        //     error: 'Произошла ошибка',
-        //   })
-
-        // if (academicSpecialty) {
-        //     const fetchDisciplinesPromise = fetchDisciplinesById(academicSpecialty.id)
-        //     toast.promise(fetchDisciplinesPromise, {
-        //         loading: 'Загружаю дисциплины',
-        //         success: 'Дисциплины загружены',
-        //         error: 'Произошла ошибка',
-        //     })
-        // }
-
     }, [])
 
     useEffect(() => {
