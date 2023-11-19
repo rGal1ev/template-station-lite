@@ -2,13 +2,15 @@ import { ReactNode } from "react";
 
 interface ListColumnProps {
     children: ReactNode
+    spacing?: number
 }
 
 function ListColumn({
-    children
+    children,
+    spacing=2
 }: ListColumnProps) {
     return (
-        <ul className="flex flex-col gap-2">
+        <ul className={`flex flex-col gap-${spacing}`}>
             { children }
         </ul>
     );

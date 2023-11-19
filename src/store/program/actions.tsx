@@ -1,6 +1,7 @@
 import { Speciality } from "../../types/program/speciality"
 import { Competence, Developer, Section } from "../../types/program/index"
 import { ProgramState } from "./state"
+import { Theme } from "../../types/program/index"
 
 export interface ProgramStateGeneralActions {
     setDevelopmentYear: (newValue: string) => void
@@ -31,6 +32,11 @@ export interface ProgramStateSectionActions {
     sectionBy: (by: string) => Section | undefined
 }
 
+export interface ProgramStateThemeActions {
+    updateTheme: (sectionId: string, theme: Theme) => void
+    themeBy: (sectionId: string, themeId: string) => Theme | undefined
+}
+
 export interface ProgramStateDisciplineVolumeActions {
     updateTheoreticalVolume: (newValue: number) => void
     updateLaboratoryVolume: (newValue: number) => void
@@ -38,6 +44,39 @@ export interface ProgramStateDisciplineVolumeActions {
     updateIndependentVolume: (newValue: number) => void
     updateCertificationVolume: (newValue: number) => void
 }
+
+export const createThemeProgramActions = (set: any, get: any): ProgramStateThemeActions => ({
+    updateTheme: (sectionId, themeToUpdate) => set((state: ProgramState) => {
+        const section: Section = get().program.sections.find((section: Section) => section.id === sectionId)
+
+        const updatedSection = {
+            ...section,
+            themes: section.themes.map(theme => {
+                if (theme.id === themeToUpdate.id) {
+                    return themeToUpdate
+                }
+    
+                return theme
+            })
+        }
+        
+        return {program: {
+            ...state.program,
+            sections: state.program ? state.program.sections.map(section => {
+                if (section.id === updatedSection.id) {
+                    return updatedSection
+                }
+
+                return section
+            }) : [updatedSection]
+        }}
+    }),
+    
+    themeBy: (sectionId, themeId) => {
+        const section: Section = get().program.sections.find((section: Section) => section.id === sectionId)
+        return section.themes.find((theme) => theme.id === themeId)
+    }
+}) 
 
 export const createSectionProgramActions = (set: any, get: any): ProgramStateSectionActions => ({
     addSection: (section) => set((state: ProgramState) => ({program: {

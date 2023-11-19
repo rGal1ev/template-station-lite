@@ -6,20 +6,23 @@ import { ProgramStateCompetenciesActions,
          ProgramStateDeveloperActions, 
          ProgramStateGeneralActions,
          ProgramStateDisciplineVolumeActions,
-         ProgramStateSectionActions } from "./actions"
+         ProgramStateSectionActions,
+        ProgramStateThemeActions } from "./actions"
 
 import { createDevelopersProgramActions, 
          createGeneralProgramActions, 
          createCompetenciesProgramActions, 
          createDisciplineVolumeProgramActions,
-         createSectionProgramActions } from "./actions"
+         createSectionProgramActions,
+         createThemeProgramActions } from "./actions"
 
 const useProgramStore = create<ProgramState & 
                                ProgramStateGeneralActions & 
                                ProgramStateDeveloperActions &
                                ProgramStateCompetenciesActions &
                                ProgramStateDisciplineVolumeActions &
-                               ProgramStateSectionActions>()(
+                               ProgramStateSectionActions &
+                               ProgramStateThemeActions>()(
     persist(
         (set, get) => ({
             program: undefined,
@@ -59,7 +62,8 @@ const useProgramStore = create<ProgramState &
             ...createDevelopersProgramActions(set, get),
             ...createCompetenciesProgramActions(set, get),
             ...createDisciplineVolumeProgramActions(set),
-            ...createSectionProgramActions(set, get)
+            ...createSectionProgramActions(set, get),
+            ...createThemeProgramActions(set, get)
         }),
 
         {

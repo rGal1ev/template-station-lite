@@ -14,7 +14,9 @@ import Field from "../../components/UI/form/Field";
 
 function SectionEditor() {
     const [section, setSection] = useState<Section | undefined>(undefined)
+
     const sectionId = useEditorStore((state) => state.sectionId)
+    const updateThemeId = useEditorStore((state) => state.updateThemeId)
 
     const getSectionBy = useProgramStore((state) => state.sectionBy)
     const updateSection = useProgramStore((state) => state.updateSection)
@@ -28,21 +30,35 @@ function SectionEditor() {
             id: newThemeId,
             title: '',
 
-            theoreticals: [],
-            laboratorys: [],
-            practicals: [],
-            independents: [],
-            certifications: []
+            theoreticals: {
+                isHidden: false,
+                lessons: []
+            },
+            
+            laboratorys: {
+                isHidden: false,
+                lessons: []
+            },
+
+            practicals: {
+                isHidden: false,
+                lessons: []
+            },
+
+            independents: {
+                isHidden: false,
+                lessons: []
+            }
         }
 
-        setSection(prev => {
-            if (prev === undefined) return
-
-            return {
-                ...prev,
-                themes: [...prev.themes, newTheme]
-            }
+        if (section === undefined) return
+        updateSection({
+            ...section,
+            themes: [...section.themes, newTheme]
         })
+
+        updateThemeId(newThemeId)
+        navigate('../theme')
     }
 
     function handleThemeDelete(id: string) {
@@ -61,7 +77,7 @@ function SectionEditor() {
     }
 
     function handleThemeOpening(id: string) {
-        console.log(id)
+        updateThemeId(id)
         navigate('../theme')
     }
 
@@ -103,7 +119,7 @@ function SectionEditor() {
                     <Label title="Список тем"/>
 
                     {section?.themes.map((theme, index) => (
-                        <ThemeCard key={index}
+                        <ThemeCard key={theme.id}
                                    index={index}
                                    title={theme.title}
                                    onClick={() => handleThemeOpening(theme.id)}

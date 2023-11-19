@@ -12,6 +12,7 @@ import Specifications from '../views/editorViews/Specifications';
 import Plan from '../views/editorViews/Plan';
 import { Toaster } from 'react-hot-toast';
 import SectionEditor from '../views/editorViews/SectionEditor';
+import ThemeEditor from '../views/editorViews/ThemeEditor';
 
 export default function App() {
     const { getMeetingHandled } = useUserPreferences()
@@ -46,7 +47,7 @@ export default function App() {
 
                             <Route path='developer' element={<DeveloperEditor />} />
                             <Route path='section' element={<SectionEditor />} />
-                            <Route path='theme' element={<div>Hello</div>} />
+                            <Route path='theme' element={<ThemeEditor />} />
                         </Route>
 
                         <Route path='/export' element={<ProgramExport />} />
