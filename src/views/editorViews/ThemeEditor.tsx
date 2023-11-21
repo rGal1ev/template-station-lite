@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useEditorStore } from "../../store/editor";
 import { EducationalUnit, Theme } from "../../types/program";
 import OutletLayout from "../../components/UI/OutletLayout";
