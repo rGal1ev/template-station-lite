@@ -1,5 +1,6 @@
 import { ChangeEvent } from "react";
 import Field from "../../UI/form/Field";
+import { memo } from "react";
 
 interface LessonCardProps {
     id: string
@@ -25,6 +26,7 @@ function LessonCard({
     function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
         onTitleChange(e, type, id)
     }
+    
     return (
         <li className="group transition-all w-full bg-[#3A3A3A] border-2 border-transparent rounded flex overflow-clip hover:border-[#575757]">
             <div className="text-left p-3 w-full">
@@ -39,4 +41,4 @@ function LessonCard({
     );
 }
 
-export default LessonCard;
+export default memo(LessonCard);

@@ -11,6 +11,7 @@ import { useEditorStore } from "../../store/editor"
 import { Paperclip } from 'react-feather'
 import toast from 'react-hot-toast'
 import { useApiStore } from "../../store/api"
+import axios from "axios"
 
 export default function ProgramCardList() {
     const [isSideBarOpened, setSideBarOpened] = useState<boolean>(false)
@@ -89,6 +90,40 @@ export default function ProgramCardList() {
         setSideBarProgramId('')
     }
 
+    async function generateAndDownloadProgram(program: Program) {
+        const res = await axios({
+            url: 'http://localhost:5000/api/generate',
+            method: 'POST',
+            data: program,
+            headers: {
+                'Accept':'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            },
+            responseType: 'blob'
+        })
+
+        const file = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+        const fileURL = URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = fileURL;
+        a.download = `${program.title}.docx`;
+
+        a.click()
+    }
+
+
+    function handleDocumentGeneration(id: string) {
+        const program: Program | undefined = getProgramById(id, storageProgramList)
+        if (program === undefined) return
+
+        const generationPromise = generateAndDownloadProgram(program)
+
+        toast.promise(generationPromise, {
+            loading: 'Программа отправлена на формирование',
+            success: 'Документ успешно сформирован',
+            error: 'Произошла ошибка',
+        })
+    }
+
     useEffect(() => {
         if (editingProgram === undefined) return
 
@@ -113,15 +148,16 @@ export default function ProgramCardList() {
 
                     <div className="flex flex-wrap gap-3 mb-4">
                     {pinnedPrograms.map((program: Program) => (
-                        <ProgramCard onClick={(id) => handleProgramOpening(id)}
-                        onDuplicateClick={(id) => handleProgramDuplication(id)}
-                        onInfoClick={(id) => handleSideBarOpen(id)}
-                        onDeleteClick={(id) => handleProgramDelete(id)}
-                        onPinnedClick={(id) => handlePinned(id)}
-                        key={program.id} 
-                        id={program.id} 
-                        title={program.title} 
-                        isPinned={program.isPinned}/>
+                        <ProgramCard onGenerateClick={(id) => handleDocumentGeneration(id)}
+                                     onClick={(id) => handleProgramOpening(id)}
+                                     onDuplicateClick={(id) => handleProgramDuplication(id)}
+                                     onInfoClick={(id) => handleSideBarOpen(id)}
+                                     onDeleteClick={(id) => handleProgramDelete(id)}
+                                     onPinnedClick={(id) => handlePinned(id)}
+                                     key={program.id} 
+                                     id={program.id} 
+                                     title={program.title} 
+                                     isPinned={program.isPinned}/>
                     ))}
                     </div>
                 </>
@@ -136,15 +172,16 @@ export default function ProgramCardList() {
                     <h3 className="text-neutral-400 mb-2 font-semibold">{date}</h3>
                     <div className="flex flex-wrap gap-3 mb-4">
                         {sortedGroupedByDatePrograms[date].map((program: Program) => (
-                            <ProgramCard onClick={(id) => handleProgramOpening(id)}
-                                onDuplicateClick={(id) => handleProgramDuplication(id)}
-                                onInfoClick={(id) => handleSideBarOpen(id)}
-                                onDeleteClick={(id) => handleProgramDelete(id)}
-                                onPinnedClick={(id) => handlePinned(id)}
-                                key={program.id} 
-                                id={program.id} 
-                                title={program.title} 
-                                isPinned={program.isPinned}/>
+                            <ProgramCard onGenerateClick={(id) => handleDocumentGeneration(id)}
+                                         onClick={(id) => handleProgramOpening(id)}
+                                         onDuplicateClick={(id) => handleProgramDuplication(id)}
+                                         onInfoClick={(id) => handleSideBarOpen(id)}
+                                         onDeleteClick={(id) => handleProgramDelete(id)}
+                                         onPinnedClick={(id) => handlePinned(id)}
+                                         key={program.id} 
+                                         id={program.id} 
+                                         title={program.title} 
+                                         isPinned={program.isPinned}/>
                         ))}
                     </div>
                 </div>
