@@ -92,7 +92,7 @@ export default function ProgramCardList() {
 
     async function generateAndDownloadProgram(program: Program) {
         const res = await axios({
-            url: 'http://localhost:5000/api/generate',
+            url: '../../api/generate',
             method: 'POST',
             data: program,
             headers: {
