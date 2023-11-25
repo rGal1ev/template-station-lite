@@ -5,11 +5,10 @@ import { useFilePicker } from "use-file-picker"
 import { Program } from "../../types/program"
 import { updateImportedProgramsId } from "./helpers"
 import { useLocalStorage } from 'usehooks-ts'
-import { File, ChevronRight } from 'react-feather'
 import { useProgramStore } from "../../store/program"
 import Field, { FieldStyle } from "../UI/form/Field"
 import toast from 'react-hot-toast'
- 
+
 interface HeaderStatusViewProps {
     isProgramEditing: boolean;
     isHomeViewOpened: boolean;
@@ -20,6 +19,9 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
     
     const editingProgramTitle = useProgramStore((state) => state.program?.title)
     const updateProgramTitle = useProgramStore((state) => state.updateTitle)
+    
+    const isProgramFinished = useProgramStore((state) => state.program?.isFinished)
+    const updateProgramFinishedStatus = useProgramStore((state) => state.updateFinishedStatus)
 
     const navigate = useNavigate()
 
@@ -40,11 +42,16 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
         setStorageProgramList((prev) => (
             [...prev, ...importedProgramsWithNewID]
         ))
+        
         toast.success(`Импортировано ${importedProgramsWithNewID.length} прогамм(ы)`)
     }
 
     function handleProgramTitleChange(e: ChangeEvent<HTMLInputElement>) {
         updateProgramTitle(e.target.value)
+    }
+
+    function handleProgramFinishStatusClick() {
+        updateProgramFinishedStatus(!isProgramFinished)
     }
 
     return (
@@ -55,9 +62,10 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
             </button>
 
             <div className='flex items-center gap-3 '>
-                    <span className='w-[2px] h-[15px] bg-neutral-400 rounded'></span> 
+                    <span className='w-[2px] h-[15px] bg-neutral-400 rounded'></span>
+
                     {!isProgramEditing ?  
-                        <div className='flex gap-3 items-center'>
+                        <div className='flex gap-3 items-center ml-2'>
                             <p className='text-neutral-400 font-medium w-[150px] leading-4 select-none'>Ваши документы сохранены локально</p>     
                             <div className='flex'>
                                 <button onClick={() => openFilePicker()} className='transition-all py-1 px-3 bg-neutral-600 border-2 border-transparent hover:border-neutral-400 rounded-l-full font-medium'>Импортировать</button>
@@ -68,17 +76,10 @@ export default function HeaderStatusView({ isProgramEditing, isHomeViewOpened }:
                     :
                     
                         <div className="flex items-center gap-1">
-                            <div className="flex gap-1 text-neutral-400">
-                                <File size={20} />
-                                <span className="font-semibold select-none">Мои документы</span>
-                            </div>
-
-                            <ChevronRight className="text-neutral-400" size={20} />
-
                             <Field style={FieldStyle.TRANSPARENT} onChange={handleProgramTitleChange} value={editingProgramTitle} />
 
-                            <button className="ml-2 transition-all py-1 px-3 bg-neutral-600 border-2 border-transparent hover:border-neutral-400 rounded-full font-medium">
-                                Отметить как завершенное
+                            <button onClick={handleProgramFinishStatusClick} className="ml-2 transition-all py-1 px-3 bg-neutral-600 border-2 border-transparent hover:border-neutral-400 rounded-full font-medium">
+                                {isProgramFinished ? 'Отметить как редактируемое' : 'Отметить как завершенное'}
                             </button>
                         </div> 
                     } 

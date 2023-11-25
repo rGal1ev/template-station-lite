@@ -6,5 +6,7 @@ export interface ProgramState {
     update: (newProgram: Program) => void
     updateTitle: (newTitle: string) => void
     updatePinned: (newValue: boolean) => void
+    updateFinishedStatus: (newValue: boolean) => void
+
     clear: () => void
 }

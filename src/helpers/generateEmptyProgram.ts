@@ -10,13 +10,14 @@ export function generateEmptyProgram(): Program {
 
     return {
         id: uuid(),
-        title: `Новый документ с длинным названием`,
+        title: `Новый документ`,
         developmentYear: '',
         academicSpecialty: undefined,
         academicDiscipline: '',
-
         createdAt: `${year}.${month}.${day}`,
+
         isPinned: false,
+        isFinished: false,
 
         developers: [],
         competencies: [],

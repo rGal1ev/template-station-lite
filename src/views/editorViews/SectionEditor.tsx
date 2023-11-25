@@ -112,7 +112,7 @@ function SectionEditor() {
             <Column>
                 <Column>
                     <Label title="Наименование раздела"/>
-                    <Field value={section?.title} width={300} onChange={(e) => onSectionTitleChange(e)} />
+                    <Field value={section?.title} stretch={true} onChange={(e) => onSectionTitleChange(e)} />
                 </Column>
 
                 <Column>
@@ -122,6 +122,7 @@ function SectionEditor() {
                         <ThemeCard key={theme.id}
                                    index={index}
                                    title={theme.title}
+                                   theme={theme}
                                    onClick={() => handleThemeOpening(theme.id)}
                                    onDeleteClick={() => handleThemeDelete(theme.id)} />
                     ))}

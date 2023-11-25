@@ -15,6 +15,7 @@ export default function AppHeader() {
     const editingProgram = useProgramStore((state) => state.program)
     const updateEditorProgramId = useEditorStore((state) => state.updateId)
     const updateEditingProgram = useProgramStore((state) => state.update)
+    const clearEditingProgram = useProgramStore((state) => state.clear)
 
     const [, setStorageProgramList] = useLocalStorage<Program[]>('program-list', [])
 
@@ -79,6 +80,19 @@ export default function AppHeader() {
         link.click();
     }
 
+    function deleteProgram() {
+        if (editingProgram === undefined) return
+
+        setStorageProgramList(prev => {
+            return prev.filter(program => {
+                program.id !== editingProgram.id
+            })
+        })
+        clearEditingProgram()
+
+        navigate('../../')
+    }
+
 
     useEffect(() => {
         processRouteChange()
@@ -93,7 +107,7 @@ export default function AppHeader() {
             <div className='flex items-center gap-1'>
                 {isProgramEditing && 
                 <>
-                    <button onClick={createEmptyProgram} className="transition-all bg-neutral-700 hover:bg-red-600 text-sm px-6 py-2 rounded-l-3xl rounded-r-md text-white font-medium">
+                    <button onClick={deleteProgram} className="transition-all bg-neutral-700 hover:bg-red-600 text-sm px-6 py-2 rounded-l-3xl rounded-r-md text-white font-medium">
                         Удалить
                     </button>
 

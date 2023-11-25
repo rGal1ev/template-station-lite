@@ -12,7 +12,9 @@ export interface Program {
     academicSpecialty: Speciality | undefined
     academicDiscipline: string
     createdAt: string
+
     isPinned: boolean
+    isFinished: boolean
 
     developers: Developer[]
     competencies: Competence[]

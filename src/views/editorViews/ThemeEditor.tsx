@@ -12,6 +12,7 @@ import { v4 as uuid } from "uuid";
 import LessonHeader from "../../components/Editor/LessonHeader/LessonHeader";
 import ListColumn from "../../components/UI/columns/ListColumn";
 import LessonCard from "../../components/Editor/LessonCard/LessonCard";
+import Row from "../../components/UI/Row";
 
 export default function ThemeEditor() {
     const [theme, setTheme] = useState<Theme | undefined>(undefined)
@@ -89,7 +90,7 @@ export default function ThemeEditor() {
         setTheme({
             ...theme,
             [type]: {
-                isHidden: theme[type].isHidden,
+                isHidden: false,
                 lessons: [...theme[type].lessons, newLessonUnit]
             }
         })
@@ -114,7 +115,10 @@ export default function ThemeEditor() {
             <Column>
                 <Column>
                     <Label title="Наименование темы"/>
-                    <Field value={theme?.title} onChange={(e) => handleThemeTitleChange(e)} />
+                    <Row> 
+                        <Field value={theme?.title} stretch={true} onChange={(e) => handleThemeTitleChange(e)} />
+                        <RoundedButton title="Вернуться назад" onClick={() => navigate(-1)}/>
+                    </Row>
                 </Column>
 
                 <Label title="Список лекций"/>
@@ -202,8 +206,6 @@ export default function ThemeEditor() {
                         ))}
                     </ListColumn>
                 )}
-
-                <RoundedButton title="Вернуться назад" onClick={() => navigate(-1)}/>
             </Column>
         </OutletLayout>
     );

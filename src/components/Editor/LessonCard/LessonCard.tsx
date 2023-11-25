@@ -1,6 +1,5 @@
 import { ChangeEvent } from "react";
 import Field from "../../UI/form/Field";
-import { memo } from "react";
 
 interface LessonCardProps {
     id: string
@@ -13,7 +12,7 @@ interface LessonCardProps {
     onDeleteClick: (type: string, id: string) => void
 }
 
-function LessonCard({
+export default function LessonCard({
     id,
     index,
     type,
@@ -30,7 +29,7 @@ function LessonCard({
     return (
         <li className="group transition-all w-full bg-[#3A3A3A] border-2 border-transparent rounded flex overflow-clip hover:border-[#575757]">
             <div className="text-left p-3 w-full">
-                <p className="mb-2">{typeName} {index + 1}</p>
+                <p className="mb-2 font-semibold text-secondary-text select-none">{index + 1} {typeName}</p>
                 <Field value={title} stretch={true} onChange={(e) => handleTitleChange(e)}/>
             </div>
 
@@ -40,5 +39,3 @@ function LessonCard({
         </li>
     );
 }
-
-export default memo(LessonCard);

@@ -56,8 +56,22 @@ const useProgramStore = create<ProgramState &
                     }
                 }
             }),
+
+            updateFinishedStatus: (newValue) => set((state) => {
+                if (state.program === undefined) return {
+                    program: undefined
+                }
+
+                return {
+                    program: {
+                        ...state.program,
+                        isFinished: newValue
+                    }
+                }
+            }),
             
             clear: () => set(() => ({program: undefined})),
+
             ...createGeneralProgramActions(set),
             ...createDevelopersProgramActions(set, get),
             ...createCompetenciesProgramActions(set, get),

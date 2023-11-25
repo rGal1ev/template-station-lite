@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import { Program } from "../../types/program"
 import { duplicateProgram, getProgramById, deleteProgramFromList, updateProgramInList, pinProgramFromList } from "./helpers"
 import ProgramCard from "../ProgramCard/ProgramCard"
-import ProgramSideBar from "../ProgramSideBar/ProgramSideBar"
 import { useLocalStorage } from 'usehooks-ts'
 import { useNavigate } from "react-router-dom"
 import { useProgramStore } from "../../store/program"
@@ -14,9 +13,6 @@ import { useApiStore } from "../../store/api"
 import axios from "axios"
 
 export default function ProgramCardList() {
-    const [isSideBarOpened, setSideBarOpened] = useState<boolean>(false)
-    const [sideBarProgramId, setSideBarProgramId] = useState<string>('')
-    
     const editingProgram = useProgramStore((state) => state.program)
     const updateEditingProgram = useProgramStore((state) => state.update)
 
@@ -45,6 +41,7 @@ export default function ProgramCardList() {
         return acc;
     }, {} as Record<string, Program[]>);
 
+    const finishedProgramList = storageProgramList.filter(program => program.isFinished)
     const pinnedPrograms = storageProgramList.filter((program: Program) => program.isPinned)
 
     function includeDuplicatedProgram(duplicatedProgram: Program) {
@@ -78,16 +75,6 @@ export default function ProgramCardList() {
 
     function handlePinned(id: string) {
         setStorageProgramList(pinProgramFromList(id, storageProgramList))
-    }
-
-    function handleSideBarOpen(id: string) {
-        setSideBarProgramId(id)
-        setSideBarOpened(true)
-    }
-
-    function handleSideBarClose() {
-        setSideBarOpened(false)
-        setSideBarProgramId('')
     }
 
     async function generateAndDownloadProgram(program: Program) {
@@ -147,18 +134,39 @@ export default function ProgramCardList() {
                     </div>
 
                     <div className="flex flex-wrap gap-3 mb-4">
-                    {pinnedPrograms.map((program: Program) => (
-                        <ProgramCard onGenerateClick={(id) => handleDocumentGeneration(id)}
-                                     onClick={(id) => handleProgramOpening(id)}
-                                     onDuplicateClick={(id) => handleProgramDuplication(id)}
-                                     onInfoClick={(id) => handleSideBarOpen(id)}
-                                     onDeleteClick={(id) => handleProgramDelete(id)}
-                                     onPinnedClick={(id) => handlePinned(id)}
-                                     key={program.id} 
-                                     id={program.id} 
-                                     title={program.title} 
-                                     isPinned={program.isPinned}/>
-                    ))}
+                        {pinnedPrograms.map((program: Program) => (
+                            <ProgramCard onGenerateClick={(id) => handleDocumentGeneration(id)}
+                                        onClick={(id) => handleProgramOpening(id)}
+                                        onDuplicateClick={(id) => handleProgramDuplication(id)}
+                                        onDeleteClick={(id) => handleProgramDelete(id)}
+                                        onPinnedClick={(id) => handlePinned(id)}
+                                        key={program.id} 
+                                        id={program.id} 
+                                        title={program.title} 
+                                        isPinned={program.isPinned}/>
+                        ))}
+                    </div>
+                </>
+            }
+
+            {!(finishedProgramList.length === 0) && 
+                <>
+                    <div className="flex gap-1 items-center mb-2 select-none">
+                        <p className="font-semibold">Завершенные</p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 mb-4">
+                        {finishedProgramList.map((program: Program) => (
+                            <ProgramCard onGenerateClick={(id) => handleDocumentGeneration(id)}
+                                        onClick={(id) => handleProgramOpening(id)}
+                                        onDuplicateClick={(id) => handleProgramDuplication(id)}
+                                        onDeleteClick={(id) => handleProgramDelete(id)}
+                                        onPinnedClick={(id) => handlePinned(id)}
+                                        key={program.id} 
+                                        id={program.id} 
+                                        title={program.title} 
+                                        isPinned={program.isPinned}/>
+                        ))}
                     </div>
                 </>
             }
@@ -175,7 +183,6 @@ export default function ProgramCardList() {
                             <ProgramCard onGenerateClick={(id) => handleDocumentGeneration(id)}
                                          onClick={(id) => handleProgramOpening(id)}
                                          onDuplicateClick={(id) => handleProgramDuplication(id)}
-                                         onInfoClick={(id) => handleSideBarOpen(id)}
                                          onDeleteClick={(id) => handleProgramDelete(id)}
                                          onPinnedClick={(id) => handlePinned(id)}
                                          key={program.id} 
@@ -186,8 +193,6 @@ export default function ProgramCardList() {
                     </div>
                 </div>
             ))}
-
-            <ProgramSideBar onClose={handleSideBarClose} programId={sideBarProgramId} isOpened={isSideBarOpened} />
         </div>
     );
 }

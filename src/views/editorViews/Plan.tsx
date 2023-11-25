@@ -94,31 +94,31 @@ export default function Plan() {
                 <Column>
                     <Label title="Теория"/>
                     <Field value={theoreticalVolume} 
-                           onChange={(e) => updateTheoreticalVolume(parseInt(e.target.value))}/>
+                           onChange={(e) => updateTheoreticalVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
                 </Column>
 
                 <Column>
                     <Label title="Лабораторные"/>
                     <Field value={laboratoryVolume} 
-                           onChange={(e) => updateLaboratoryVolume(parseInt(e.target.value))}/>
+                           onChange={(e) => updateLaboratoryVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
                 </Column>
 
                 <Column>
                     <Label title="Практические"/>
                     <Field value={practicalVolume} 
-                           onChange={(e) => updatePracticalVolume(parseInt(e.target.value))}/>
+                           onChange={(e) => updatePracticalVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
                 </Column>
 
                 <Column>
                     <Label title="Самостоятельные"/>
                     <Field value={independentVolume} 
-                           onChange={(e) => updateIndependentVolume(parseInt(e.target.value))}/>
+                           onChange={(e) => updateIndependentVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
                 </Column>
 
                 <Column>
                     <Label title="Промеж-ая аттестация"/>
                     <Field value={certificationVolume} 
-                           onChange={(e) => updateCertificationVolume(parseInt(e.target.value))}/>
+                           onChange={(e) => updateCertificationVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
                 </Column>
             </Row>
 
@@ -129,6 +129,7 @@ export default function Plan() {
                     <SectionCard key={index}
                                  index={index}
                                  title={section.title}
+                                 themes={section.themes}
                                  onClick={() => handleSectionClick(section.id)}
                                  onDeleteClick={() => handleSectionDelete(section.id)} />
                 ))}

@@ -1,4 +1,4 @@
-import { Trash, Info, Plus, Paperclip } from 'react-feather'
+import { Trash, Plus, Paperclip } from 'react-feather'
 import { MouseEvent } from 'react'
 
 interface ProgramCardProps {
@@ -10,7 +10,6 @@ interface ProgramCardProps {
     onGenerateClick: (id: string) => void
 
     onDuplicateClick: (id: string) => void
-    onInfoClick: (id: string) => void
     onDeleteClick: (id: string) => void
     onPinnedClick: (id: string) => void
 }
@@ -21,8 +20,7 @@ export default function ProgramCard({
     isPinned,
 
     onDuplicateClick,
-    onGenerateClick, 
-    onInfoClick, 
+    onGenerateClick,
     onDeleteClick, 
     onClick,
     onPinnedClick 
@@ -35,11 +33,6 @@ export default function ProgramCard({
     function handleDelete(e: MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
         onDeleteClick(id)
-    }
-
-    function handleInfoOpening(e: MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation()
-        onInfoClick(id)
     }
 
     function handlePin(e: MouseEvent<HTMLButtonElement>) {
@@ -81,9 +74,6 @@ export default function ProgramCard({
                 </button>
                 <button onClick={handleDuplicateClick} className='px-2 hover:bg-accent hover:text-white'>
                     <Plus size={20}/>
-                </button>
-                <button onClick={handleInfoOpening} className='px-2 hover:bg-accent hover:text-white'>
-                    <Info size={20}/>
                 </button>
             </div>
         </div>
