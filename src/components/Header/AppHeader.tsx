@@ -83,11 +83,7 @@ export default function AppHeader() {
     function deleteProgram() {
         if (editingProgram === undefined) return
 
-        setStorageProgramList(prev => {
-            return prev.filter(program => {
-                program.id !== editingProgram.id
-            })
-        })
+        setStorageProgramList(prev => prev.filter(program => program.id !== editingProgram.id))
         clearEditingProgram()
 
         navigate('../../')

@@ -10,7 +10,7 @@ export function generateEmptyProgram(): Program {
 
     return {
         id: uuid(),
-        title: `Новый документ`,
+        title: `Новая рабочая программа`,
         developmentYear: '',
         academicSpecialty: undefined,
         academicDiscipline: '',

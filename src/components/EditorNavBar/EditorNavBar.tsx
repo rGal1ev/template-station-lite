@@ -23,12 +23,6 @@ export default function EditorNavBar() {
                             <p className="medium text-[#BFBFBF]">Заполняются разделы и темы рабочей программы</p>
                         </NavLink>
                     </li>
-                    <li>
-                        <NavLink className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "rounded block text-left px-4 py-2 w-full bg-neutral-700" : "transition-all block text-left px-4 py-2 w-full rounded hover:bg-neutral-600"} to="other">
-                            <p className="font-semibold">Прочее</p>
-                            <p className="medium text-[#BFBFBF]">Дополнительная информация рабочей программы</p>
-                        </NavLink>
-                    </li>
                 </ul>
             </nav>
         </div>

@@ -43,7 +43,6 @@ export default function App() {
                             <Route path='general' element={<General />} />
                             <Route path='specifications' element={<Specifications />} />
                             <Route path='plan' element={<Plan />} />
-                            <Route path='other' element={<h1>Прочее</h1>} />
 
                             <Route path='developer' element={<DeveloperEditor />} />
                             <Route path='section' element={<SectionEditor />} />
