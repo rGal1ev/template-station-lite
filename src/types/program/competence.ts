@@ -1,5 +1,5 @@
 export enum CompetenceType {
-    PRACTICIAL = "practicial",
+    PRACTICIAL = "professional",
     GENERAL = "general"
 }
 

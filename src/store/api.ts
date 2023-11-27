@@ -76,7 +76,7 @@ export const useApiStore = create<ApiStore & ApiStoreActions>((set) => ({
         if (res.status === 200) {
             const data = res.data.map(item => ({
                 id: item.id,
-                title: item.title,
+                title: item.value,
                 type: item.type
             }))
 
