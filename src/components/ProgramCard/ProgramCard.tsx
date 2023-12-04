@@ -1,6 +1,6 @@
 import { Trash, Plus, Paperclip } from 'react-feather'
 import { MouseEvent } from 'react'
-import { Program, Theme } from '../../types/program'
+import { Program } from '../../types/program'
 
 interface ProgramCardProps {
     id: string
