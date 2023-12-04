@@ -143,7 +143,8 @@ export default function ProgramCardList() {
                                         key={program.id} 
                                         id={program.id} 
                                         title={program.title} 
-                                        isPinned={program.isPinned}/>
+                                        isPinned={program.isPinned}
+                                        program={program}/>
                         ))}
                     </div>
                 </>
@@ -165,7 +166,8 @@ export default function ProgramCardList() {
                                         key={program.id} 
                                         id={program.id} 
                                         title={program.title} 
-                                        isPinned={program.isPinned}/>
+                                        isPinned={program.isPinned}
+                                        program={program}/>
                         ))}
                     </div>
                 </>
@@ -188,7 +190,8 @@ export default function ProgramCardList() {
                                          key={program.id} 
                                          id={program.id} 
                                          title={program.title} 
-                                         isPinned={program.isPinned}/>
+                                         isPinned={program.isPinned}
+                                         program={program}/>
                         ))}
                     </div>
                 </div>

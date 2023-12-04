@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useProgramStore } from "../../store/program"
 import { useEditorStore } from "../../store/editor"
 import { useNavigate } from "react-router-dom"
@@ -17,9 +17,6 @@ import toast from 'react-hot-toast'
 import { useApiStore } from "../../store/api"
 
 export default function General() {
-    // const [specialties, setSpecialties] = useState<any[]>([])
-    // const [disciplines, setDisciplines] = useState<any[]>([])
-
     const specialties = useApiStore((state) => state.specialties)
     const disciplines = useApiStore((state) => state.disciplines)
 
@@ -49,9 +46,11 @@ export default function General() {
         removeDeveloperBy: state.removeDeveloper
     }))
 
-    const programDocumentName = () => {
-        return `РП_${editingProgram?.academicSpecialty?.code || ''}_${editingProgram?.developmentYear || ''}`
-    }
+    const programDocumentName = useMemo(() => {
+        return `РП_${editingProgram?.academicSpecialty?.code.trim() || ''}_${editingProgram?.developmentYear.trim() || ''}`
+
+    }, [editingProgram?.academicSpecialty?.code, 
+        editingProgram?.developmentYear])
 
     const navigate = useNavigate()
 
@@ -71,7 +70,7 @@ export default function General() {
                 loading: 'Загружаю дисциплины',
                 success: 'Дисциплины загружены',
                 error: 'Произошла ошибка',
-              })
+        })
     }
 
     function onAcademicDisciplineChange(option: any) {
@@ -146,7 +145,7 @@ export default function General() {
             <Row>
                 <Column>
                     <Label title="Название документа"/>
-                    <Field value={programDocumentName()} readable={FieldType.READONLY}/>
+                    <Field value={programDocumentName} readable={FieldType.READONLY}/>
                 </Column>
 
                 <Column>

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { v4 as uuid } from "uuid"
 import { useEditorStore } from "../../store/editor"
 import SectionCard from "../../components/Editor/SectionCard/SectionCard"
+import { useMemo } from "react"
 
 export default function Plan() {
     const { theoreticalVolume, 
@@ -70,7 +71,7 @@ export default function Plan() {
         removeSection(id)
     }
 
-    const totalVolumesSum = (): number => {
+    const totalVolumesSum = useMemo(() => {
         if (theoreticalVolume === undefined || 
             practicalVolume === undefined || 
             independentVolume === undefined ||
@@ -82,43 +83,52 @@ export default function Plan() {
                independentVolume + 
                laboratoryVolume +
                certificationVolume
+    
+    }, [theoreticalVolume, 
+        practicalVolume, 
+        independentVolume, 
+        laboratoryVolume, 
+        certificationVolume])
 
+    function parseToNumber(value: any) {
+        return value === '' || isNaN(parseInt(value)) ? 0 : parseInt(value)
     }
+
     return (
         <OutletLayout>
             <Row>
                 <Label title="Объем учебной дисциплины"/>
-                <span className="text-secondary-text ml-2">Всего: {!isNaN(totalVolumesSum()) ? totalVolumesSum() : '-'}</span>
+                <span className="text-secondary-text ml-2">Всего: {!isNaN(totalVolumesSum) ? totalVolumesSum : '-'}</span>
             </Row>
             <Row>
                 <Column>
                     <Label title="Теория"/>
                     <Field value={theoreticalVolume} 
-                           onChange={(e) => updateTheoreticalVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
+                           onChange={(e) => updateTheoreticalVolume(parseToNumber(e.target.value))}/>
                 </Column>
 
                 <Column>
                     <Label title="Лабораторные"/>
                     <Field value={laboratoryVolume} 
-                           onChange={(e) => updateLaboratoryVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
+                           onChange={(e) => updateLaboratoryVolume(parseToNumber(e.target.value))}/>
                 </Column>
 
                 <Column>
                     <Label title="Практические"/>
                     <Field value={practicalVolume} 
-                           onChange={(e) => updatePracticalVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
+                           onChange={(e) => updatePracticalVolume(parseToNumber(e.target.value))}/>
                 </Column>
 
                 <Column>
                     <Label title="Самостоятельные"/>
                     <Field value={independentVolume} 
-                           onChange={(e) => updateIndependentVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
+                           onChange={(e) => updateIndependentVolume(parseToNumber(e.target.value))}/>
                 </Column>
 
                 <Column>
                     <Label title="Промеж-ая аттестация"/>
                     <Field value={certificationVolume} 
-                           onChange={(e) => updateCertificationVolume(e.target.value === '' || isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}/>
+                           onChange={(e) => updateCertificationVolume(parseToNumber(e.target.value))}/>
                 </Column>
             </Row>
 
