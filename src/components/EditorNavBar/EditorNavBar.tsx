@@ -32,6 +32,11 @@ export default function EditorNavBar() {
                 })
             })
         })
+
+        if (sections?.length === 0) {
+            setSectionsVolume(sectionsVolume);
+        }
+
     }, [sections])
 
     return (

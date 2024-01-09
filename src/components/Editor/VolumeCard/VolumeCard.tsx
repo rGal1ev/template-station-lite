@@ -15,6 +15,7 @@ function VolumeCard({
     const [isSatisfy, setSatisfy] = useState<boolean>(false);
 
     useEffect(() => {
+        console.log(sectionsVolume)
         if (volume < sectionsVolume || volume > sectionsVolume) {
             setSatisfy(false);
             return;
