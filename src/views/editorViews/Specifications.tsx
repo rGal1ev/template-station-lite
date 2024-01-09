@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import DataSelect from "../../components/UI/form/DataSelect";
 import CompetenceCard from "../../components/Editor/CompetenceCard/CompetenceCard";
 import { useApiStore } from "../../store/api";
+import { Competence } from "../../types/program";
 
 export default function Specifications() {
     const [selectableFetchedCompetencies, setSelectableFetchedCompetencies] = useState<any[]>([])
@@ -20,6 +21,9 @@ export default function Specifications() {
 
     const addCompetence = useProgramStore((state) => state.addCompetence)
     const removeCompetence = useProgramStore((state) => state.removeCompetence)
+
+    const [professionalCompetencies, setProfessionalCompetencies] = useState<Competence[] | undefined>([])
+    const [generalCompetencies, setGeneralCompetencies] = useState<Competence[] | undefined>([])
 
     function updateSelectableCompetencies(competencies: any[]) {
         const updatedSelectableCompetencies: any[] = []
@@ -115,8 +119,13 @@ export default function Specifications() {
           })
     }, [])
 
+
+
     useEffect(() => {
         updateSelectableCompetencies(fetchedCompetencies)
+
+        setProfessionalCompetencies(programCompetencies?.filter(competency => competency.type === "professional"))
+        setGeneralCompetencies(programCompetencies?.filter(competency => competency.type === "general"))
     }, [programCompetencies])
 
     useEffect(() => {
@@ -127,8 +136,19 @@ export default function Specifications() {
     return (
         <OutletLayout>
             <Column>
-                <Label title="Практические и общие компетенции"/>
-                {programCompetencies?.map((competency) => (
+                <Label title="Профессиональные компетенции"/>
+                {professionalCompetencies?.map((competency) => (
+                    <CompetenceCard 
+                        key={competency.id}
+                        title={competency.title}
+                        type={competency.type}
+                        onClick={() => handleCompetenceDelete(competency.id)}
+                    />
+                    
+                ))}
+
+                <Label title="Общие компетенции"/>
+                {generalCompetencies?.map((competency) => (
                     <CompetenceCard 
                         key={competency.id}
                         title={competency.title}
